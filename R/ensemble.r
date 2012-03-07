@@ -16,18 +16,20 @@
 #' @return an S3 ensemble object. 
 #'
 #' @export
-ensemble <- function(data, by, MODEL = lm, formula, ...) {
+ensemble <- function(data, by, formula, ... , MODEL = "lm") {
 	model <- match.fun(MODEL)
 	fit <- function(data) model(data = data[ , -which(names(data) %in% by)], 
 		formula, ...)
 	
 	models <- dlply(data, by, fit)
 	
-	group <- data[[by]]
+	ord.call <- as.call(c(quote(order), unname(mapply(as.name, by))))
+	ord <- eval(ord.call, data, parent.frame())
 	
 	structure(models, 
-		method = MODEL,
+		method = as.character(MODEL),
 		formula = formula, 
-		reorder = order(order(group)),
+		reorder = order(ord),
 		class = c("ensemble", "list"))
 }
+
