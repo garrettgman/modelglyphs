@@ -1,0 +1,5 @@
+S3method(format,ensemble)
+S3method(print,ensemble)
+export(ensemble)
+export(is.ensemble)
+export(renamed)
