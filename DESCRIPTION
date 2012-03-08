@@ -1,4 +1,4 @@
-Package: ensembleModels
+Package: modelglyphs
 Maintainer: Garrett Grolemund <grolemund@rice.edu>
 License: GPL
 Title: Explore large data with binned modelling
@@ -6,13 +6,13 @@ LazyData: true
 Type: Package
 Author: Garrett Grolemund <grolemund@rice.edu>, Hadley
     Wickham <h.wickham@gmail.com>
-Description: Ensemble models makes it easy to view the output
+Description: modelglyphs makes it easy to view the output
     of models that are applied to subsets of the data.
-Enhances: ggplot2
 Version: 0.1.0
 Depends:
     ggplot2,
     plyr,
+    reshape2,
     R (>= 2.14)
 Collate:
     'ensemble.r'

@@ -28,10 +28,9 @@ case.names.ensemble <- function(object, ...){
 }
 
 #' S3method coef ensemble
-coef.ensemble <- function(object, ...){
+coef.ensemble <- function(object, glyph = FALSE, ...){
 	coefs <- ldply(object, coef)
-	coefs <- melt(coefs, id = 1, value.name = "coefficient")
-	arrange(coefs, group)
+	reshape2::melt(coefs, id = 1, value.name = "coefficient")
 }
 
 #' S3method confint ensemble
@@ -137,7 +136,7 @@ formula.ensemble <- function(x, ...) {
 #' S3method fortify ensemble
 fortify.ensemble <- function(model, data = NULL, ...) {
 	forts <- llply(model, fortify, ...)
-	do.call("rbind", forts)[attr(object, "reorder"), ]
+	do.call("rbind", forts)[attr(model, "reorder"), ]
 }
 
 #' S3method hatvalues ensemble
