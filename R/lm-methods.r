@@ -1,3 +1,14 @@
+add_labels <- function(df, ens) {
+	x <- attr(ens, "x")[df$gid]
+	y <- attr(ens, "y")[df$gid]
+	
+	vars <- setdiff(names(df), "gid")
+	new <- data.frame(cbind(df$gid, x, y, df[ , vars]))
+	names(new) <- c("gid", attr(ens, "x_name"), attr(ens, "y_name"), vars)
+	new
+}
+
+
 #' S3method AIC ensemble
 AIC.ensemble <- function(object, ..., k = 2) {
 	aics <- ldply(object, AIC, ..., k)
@@ -18,7 +29,8 @@ anova.ensemble <- function(object, ...){
 		)
 	}
 	
-	ldply(object, anova_df, ...)
+	df <- ldply(object, anova_df, ...)
+	add_labels(df, object)
 }
 
 #' S3method case.names ensemble
@@ -28,9 +40,10 @@ case.names.ensemble <- function(object, ...){
 }
 
 #' S3method coef ensemble
-coef.ensemble <- function(object, glyph = FALSE, ...){
+coef.ensemble <- function(object, ...){
 	coefs <- ldply(object, coef)
-	reshape2::melt(coefs, id = 1, value.name = "coefficient")
+	coefs <- reshape2::melt(coefs, id = "gid", value.name = "coefficient")
+	add_labels(coefs, object)
 }
 
 #' S3method confint ensemble
@@ -40,7 +53,8 @@ confint.ensemble <- function(object, ...){
 		int$variable <- row.names(int)
 		int[, c(3,1,2)]
 	}
-	ldply(object, get_conf, ...)
+	df <- ldply(object, get_conf, ...)
+	add_labels(df, object)
 }
 
 #' S3method cooks.distance ensemble
@@ -52,7 +66,8 @@ cooks.distance.ensemble <- function(model, ...){
 #' S3method deviance ensemble
 deviance.ensemble <- function(object, ...) {
 	devs <- ldply(object, deviance, ...)
-	renamed(devs, 2, "deviance")
+	df <- renamed(devs, 2, "deviance")
+	add_labels(df, object)
 }
 
 #' S3method dfbeta ensemble
@@ -81,11 +96,11 @@ drop1.ensemble <- function(object, ...) {
 			Df = output$Df,
 			'Sum of Sq' = output$'Sum of Sq',
 			RSS = output$RSS,
-			AIC = output$AIC,
-			P.value = output$Pr)
+			AIC = output$AIC)
 	}
 	
-	ldply(object, drop1_df, ...)
+	df <- ldply(object, drop1_df, ...)
+	add_labels(df, object)
 }
 
 #' S3method dummy.coef ensemble

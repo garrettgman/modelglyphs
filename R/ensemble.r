@@ -17,27 +17,33 @@
 #'
 #' @export
 ensemble <- function(data, x_major, y_major, model) {
-	reg.method <- match.fun(model$type)
-	model.args <- model[setdiff(names(model), "type")]
-	data$gid <- interaction(data[[x_major]], data[[y_major]], drop = TRUE)
+	data$gid <- id(list(data[[x_major]], data[[y_major]]), drop = TRUE)
 	
-	fit <- function(data, ...) {
-		data <- data[setdiff(names(data), c(x_major, y_major, "gid")), ]
-		mod <- reg.method(data, ...)
-		attr(mod, "x_adjust") <- x_major[1]
-		attr(mod, "y_adjust") <- y_major[1]
-		mod
+	fit <- function(data, model) {
+		data <- data[ , setdiff(names(data), c(x_major, y_major, "gid"))]
+		model.args <- c(data = as.name("data"), model[setdiff(names(model), "type")])
+		
+		do.call(model$type, model.args)
 	}
 	
-	models <- dlply(data, "gid", fit, model.args)
+	models <- dlply(data, "gid", fit, model)
+	
+	# can be subset by gid to return x and y
+	translations <- ddply(data, "gid", 
+		function(df) c(df[[x_major]][1], df[[y_major]][1])) 
 	
 	structure(models, 
 		method = model$type,
 		formula = model$formula, 
-		group = data$gid,
 		reorder = order(order(data$gid)),
+		x = translations$V1,
+		y = translations$V2,
+		x_name = x_major,
+		y_name = y_major,
 		class = c("ensemble", "list"))
 }
+
+
 
 #' Pass modelling information to ensemble()
 #'
