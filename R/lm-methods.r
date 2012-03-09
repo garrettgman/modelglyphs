@@ -47,7 +47,7 @@ confint.ensemble <- function(object, ...){
 
 #' S3method cooks.distance ensemble
 cooks.distance.ensemble <- function(model, ...){
-	llply_ensemble(model, cooks.distance, ...))
+	llply_ensemble(model, cooks.distance, ...)
 }
 
 #' S3method deviance ensemble
@@ -126,9 +126,7 @@ family.ensemble <- function(object, ...) {
 
 #' S3method fitted ensemble
 fitted.ensemble <- function(object, ...){
-	llply_ensemble(object, fitted, ...), recursive = TRUE,
-		use.names = FALSE)
-}
+	llply_ensemble(object, fitted, ...)}
 
 #' S3method formula ensemble
 formula.ensemble <- function(x, ...) {
@@ -142,7 +140,7 @@ fortify.ensemble <- function(model, data = NULL, ...) {
 
 #' S3method hatvalues ensemble
 hatvalues.ensemble <- function(model, ...) {
-	llply_ensemble(model, hatvalues, ...))
+	llply_ensemble(model, hatvalues, ...)
 }
 
 #' S3method influence ensemble
