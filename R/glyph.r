@@ -1,12 +1,8 @@
 #' Create the data needed to generate a glyph plot.
 #'
-#' glyphs transforms a data frame to include the 
-
-
-
-#' @param data A data frame containing variables named in \code{x_major},
-#'   \code{x_minor}, \code{y_major} and \code{y_minor}.
-#' @param x_major,x_minor,y_major,y_minor The name of the variable (as a
+#' @param data A data frame containing variables named in \code{x_minor},
+#'   \code{y_minor}, \code{x_major} and \code{y_major}.
+#' @param x_minor,y_minor,x_major,y_major The name of the variable (as a
 #'   string) for the major and minor x and y axes.  Together, each unique
 #    combination of \code{x_major} and \code{y_major} specifies a grid cell.
 #' @param polar A logical of length 1, specifying whether the glyphs should
@@ -18,17 +14,29 @@
 #' @param y_scale,x_scale The scaling function to be applied to each set of
 #'  minor values within a grid cell.  Defaults to \code{\link{identity}} so
 #'  that no scaling is performed.
-glyphs <- function(data, x_major, x_minor, y_major, y_minor, polar = FALSE, height = rel(0.95), width = rel(0.95), y_scale = identity, x_scale = identity) {
-  data$gid <- interaction(data[[x_major]], data[[y_major]], drop = TRUE)
+#' 
+#' @export
+glyphs <- function(data, x_minor, y_minor, x_major = NULL, y_major = NULL, polar = FALSE, height = rel(0.95), width = rel(0.95), y_scale = identity, x_scale = identity, quiet = FALSE) {
+  if (is.null(data$gid)) {
+    data$gid <- interaction(data[[x_major]], data[[y_major]], drop = TRUE)
+  }
+  
+  if (names(data)[1] == "gid" & is.null(x_major) & is.null(y_major)) {
+  	x_major <- names(data)[2]
+  	y_major <- names(data)[3]
+  } else if (is.null(x_major) | is.null(y_major)) {
+  	stop(paste("glyphs requires the following missing arguments:",
+  	  "x_major"[is.null(x_major)], "y_major"[is.null(y_major)]))
+  }
   
   if (is.rel(width)) {
     width <- resolution(data[[x_major]], zero = FALSE) * unclass(width)
-    message("Using width ", format(width, digits = 3))
+    if (!quiet) message("Using width ", format(width, digits = 3))
   }
     
   if (is.rel(height)) {
     height <- resolution(data[[y_major]], zero = FALSE) * unclass(height)
-    message("Using height ", format(height, digits = 3))
+    if (!quiet) message("Using height ", format(height, digits = 3))
   }
   
   if (!identical(x_scale, identity) || !identical(y_scale, identity)) {
@@ -166,6 +174,12 @@ min0 <- function(x) {
 
 
 rescale01 <- function(x, xlim=NULL) {
+  if (is.character(x)) {
+  	x <- as.numeric(factor(x))
+  }	
+  if (is.factor(x)) {
+  	x <- as.numeric(x)
+  }
   if (is.null(xlim)) {
 	  rng <- range(x, na.rm = TRUE)
    } else {
@@ -174,3 +188,8 @@ rescale01 <- function(x, xlim=NULL) {
    (x - rng[1]) / (rng[2] - rng[1])
 }
 rescale11 <- function(x, xlim=NULL) 2 * rescale01(x, xlim) - 1
+
+	
+	
+
+
