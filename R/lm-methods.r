@@ -1,14 +1,3 @@
-add_labels <- function(df, ens) {
-	x <- attr(ens, "x")[df$gid]
-	y <- attr(ens, "y")[df$gid]
-	
-	vars <- setdiff(names(df), "gid")
-	new <- data.frame(cbind(df$gid, x, y, df[ , vars]))
-	names(new) <- c("gid", attr(ens, "x_name"), attr(ens, "y_name"), vars)
-	new
-}
-
-
 #' S3method AIC ensemble
 AIC.ensemble <- function(object, ..., k = 2) {
 	aics <- ldply(object, AIC, ..., k)
@@ -35,8 +24,7 @@ anova.ensemble <- function(object, ...){
 
 #' S3method case.names ensemble
 case.names.ensemble <- function(object, ...){
-	cases <- unlist(llply(object, case.names, ...))
-	cases[attr(object, "reorder")]
+	llply_ensemble(object, case.names, ...)
 }
 
 #' S3method coef ensemble
@@ -59,8 +47,7 @@ confint.ensemble <- function(object, ...){
 
 #' S3method cooks.distance ensemble
 cooks.distance.ensemble <- function(model, ...){
-	cooks <- unlist(llply(model, cooks.distance, ...))
-	cooks[attr(model, "reorder")]
+	llply_ensemble(model, cooks.distance, ...))
 }
 
 #' S3method deviance ensemble
@@ -75,8 +62,7 @@ dfbeta.ensemble <- function(model, ...) {
 	dfbeta_df <- function(model, ...) {
 		as.data.frame(dfbeta(model))
 	}
-	dfbs <- llply(model, dfbeta_df, ...)
-	do.call("rbind", dfbs)[attr(model, "reorder"), ]
+	ldply_ensemble(model, dfbeta_df, ...)
 }
 
 #' S3method dfbetas ensemble
@@ -84,8 +70,7 @@ dfbetas.ensemble <- function(model, ...) {
 	dfbetas_df <- function(model, ...) {
 		as.data.frame(dfbetas(model))
 	}
-	dfbs <- llply(model, dfbetas_df, ...)
-	do.call("rbind", dfbs)[attr(model, "reorder"), ]
+	ldply_ensemble(model, dfbetas_df, ...)
 }
 
 #' S3method drop1 ensemble
@@ -109,7 +94,8 @@ dummy.coef.ensemble <- function(object, ...) {
 		dlist <- dummy.coef(mod, ...)
 		data.frame(variable = names(dlist), coef = unlist(dlist))
 	}
-	ldply(object, dummy_df, ...)
+	df <- ldply(object, dummy_df, ...)
+	add_labels(df, object)
 }
 
 #' S3method effects ensemble
@@ -118,7 +104,8 @@ effects.ensemble <- function(object, ...) {
 		output <- effects(mod, ...)
 		data.frame(dimension = names(output), effect = as.numeric(output))
 	}
-	ldply(object, effects_df, ...)
+	df <- ldply(object, effects_df, ...)
+	add_labels(df, object)
 }
 
 #' S3method extractAIC ensemble
@@ -127,7 +114,8 @@ extractAIC.ensemble <- function(fit, scale = 0, k = 2, ...) {
 		avec <- extractAIC(fit, scale, k, ...)
 		data.frame(edf = avec[1], aic = avec[2])
 	}
-	ldply(fit, extract_df, scale, k = 2, ...)
+	df <- ldply(fit, extract_df, scale, k = 2, ...)
+	add_labels(df, fit)
 }
 
 
@@ -138,9 +126,8 @@ family.ensemble <- function(object, ...) {
 
 #' S3method fitted ensemble
 fitted.ensemble <- function(object, ...){
-	fits <- unlist(llply(object, fitted, ...), recursive = TRUE,
+	llply_ensemble(object, fitted, ...), recursive = TRUE,
 		use.names = FALSE)
-	fits[attr(object, "reorder")]
 }
 
 #' S3method formula ensemble
@@ -150,14 +137,12 @@ formula.ensemble <- function(x, ...) {
 
 #' S3method fortify ensemble
 fortify.ensemble <- function(model, data = NULL, ...) {
-	forts <- llply(model, fortify, ...)
-	do.call("rbind", forts)[attr(model, "reorder"), ]
+	ldply_ensemble(model, fortify, ...)
 }
 
 #' S3method hatvalues ensemble
 hatvalues.ensemble <- function(model, ...) {
-	hats <- unlist(llply(model, hatvalues, ...))
-	hats[attr(model, "reorder")]
+	llply_ensemble(model, hatvalues, ...))
 }
 
 #' S3method influence ensemble
@@ -170,8 +155,7 @@ influence.ensemble <- function(model, ...) {
 			as.data.frame(ins$coefficients)
 		)
 	}
-	infs <- llply(model, influence_df, ...)
-	do.call("rbind", infs)[attr(model, "reorder"), ]
+	ldply_ensemble(model, influence_df, ...)
 }
 
 #' S3method kappa ensemble
@@ -188,14 +172,17 @@ logLik.ensemble <- function(object, ...) {
 
 #' S3method model.frame ensemble
 model.frame.ensemble <- function(formula, ...) {
-	frames <- llply(formula, model.frame, ...)
-	do.call("rbind", frames)[attr(formula, "reorder"), ]
+	ldply_ensemble(formula, model.frame, ...)
 }
 
 #' S3method model.matrix ensemble
 model.matrix.ensemble <- function(object, ...) {
-	mats <- llply(object, model.matrix, ...)
-	do.call("rbind", mats)[attr(object, "reorder"), ]
+	model.matrix_df <- function(object, ...) {
+		df <- data.frame(model.matrix(object, ...))
+		names(df)[names(df) == "X.Intercept."] <- "(Intercept)"
+		df
+	}
+	ldply_ensemble(object, model.matrix_df, ...)
 }
 
 #' S3method nobs ensemble
@@ -205,42 +192,48 @@ nobs.ensemble <- function(object, ...) {
 }
 
 #' S3method predict ensemble
-predict.ensemble <- function(object, ...){
-	predicts <- unlist(llply(object, predict, ...), recursive = TRUE,
-		use.names = FALSE)
-	predicts[attr(object, "reorder")]
+predict.ensemble <- function(object, newdata = NULL, ...){
+	if (is.null(match.call()$newdata)) {
+		llply_ensemble(object, predict, ...)
+	} else {
+		predict_df <- function(object, newdata, ...){
+			newdata$.predict <- predict(object, newdata, ...)
+			newdata
+		}
+		df <- ldply(object, predict_df, newdata, ...)
+		add_labels(df, object)
+	}	
 }
 
 #' S3method proj ensemble
 proj.ensemble <- function(object, ...){
-	projs <- llply(object, proj, ...)
-	do.call("rbind", projs)[attr(object, "reorder"), ]
+	proj_df <- function(object, ...) {
+		df <- data.frame(proj(object, ...))
+		names(df)[names(df) == "X.Intercept."] <- "(Intercept)"
+		df
+	}
+	ldply_ensemble(object, proj_df, ...)
 }
 
 #' S3method residuals ensemble
 residuals.ensemble <- function(object, ...){
-	resids <- unlist(llply(object, resid, ...), recursive = TRUE,
-		use.names = TRUE)
-	resids[attr(object, "reorder")]
+	llply_ensemble(object, resid, ...)
 }
 
 
 #' S3method rstandard ensemble
 rstandard.ensemble <- function(model, ...){
-	rs <- unlist(llply(model, rstandard, ...))
-	rs[attr(model, "reorder")]
+	llply_ensemble(model, rstandard, ...)
 }
 
 #' S3method rstudent ensemble
 rstudent.ensemble <- function(model, ...){
-	rs <- unlist(llply(model, rstudent, ...))
-	rs[attr(model, "reorder")]
+	llply_ensemble(model, rstudent, ...)
 }
 
 #' S3method simulate ensemble
-simulate.ensemble <- function(object, nsim = 1, seed = NULL, ...){
-	sims <- unlist(llply(object, simulate, ...))
-	sims[attr(object, "reorder")]
+simulate.ensemble <- function(object, ...){
+	ldply_ensemble(object, simulate, ...)
 }
 
 #' S3method summary ensemble
@@ -260,9 +253,7 @@ vcov.ensemble <- function(object, ...){
 
 #' S3method weights ensemble
 weights.ensemble <- function(object, ...){
-	ws <- unlist(llply(object, weights, ...), recursive = TRUE,
-		use.names = FALSE)
-	ws[attr(object, "reorder")]
+	llply_ensemble(object, weights, ...)
 }
 
 # note: weighted.residuals works as is so long as weights.ensemble and 

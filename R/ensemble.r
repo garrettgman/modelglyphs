@@ -40,6 +40,7 @@ ensemble <- function(data, x_major, y_major, model) {
 		y = translations$V2,
 		x_name = x_major,
 		y_name = y_major,
+		row.names = row.names(data),
 		class = c("ensemble", "list"))
 }
 
