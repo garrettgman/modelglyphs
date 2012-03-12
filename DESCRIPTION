@@ -15,10 +15,11 @@ Depends:
     reshape2,
     R (>= 2.14)
 Collate:
-    'ensemble.R'
+    'ensemble.r'
     'ensemble-class.R'
     'lm-methods.r'
     'not-yet-working.r'
     'util.r'
     'geom_modelglyphs.R'
     'glyph.r'
+    'autoplot.r'

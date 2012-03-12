@@ -1,3 +1,4 @@
+S3method(autoplot,glyphplot)
 S3method(format,ensemble)
 S3method(print,ensemble)
 export(add_labels)
