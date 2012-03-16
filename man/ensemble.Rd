@@ -2,7 +2,8 @@
 \alias{ensemble}
 \title{Performs group-wise modelling on a data frame}
 \usage{
-  ensemble(data, x_major, y_major, model)
+  ensemble(data, group, x_major = NULL, y_major = NULL,
+    model)
 }
 \arguments{
   \item{data}{a data frame to apply group-wise modelling
