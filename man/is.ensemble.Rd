@@ -6,10 +6,10 @@
 }
 \arguments{
   \item{x}{An object to be tested for membership in the S3
-  ensemble class}
+  mg_ensemble class}
 }
 \description{
   is.ensemble tests whether an object inherits from the
-  ensemble class.
+  mg_ensemble class.
 }
 

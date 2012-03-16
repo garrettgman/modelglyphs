@@ -1,22 +1,24 @@
-#' @S3method format ensemble
-format.ensemble <- function(x, ...) {
+#' @S3method format mg_ensemble
+format.mg_ensemble <- function(x, ...) {
 	cat(paste("ensemble of", length(x), "models:"), 
 		paste("\nmethod =", attr(x, "method"), "\nformula =", 
 		deparse(attr(x, "formula"))))
 }
 
-#' @S3method print ensemble
-print.ensemble <- function(x, ...) {
+#' @S3method print mg_ensemble
+print.mg_ensemble <- function(x, ...) {
 	format(x)
 }
 
 #' Is x an ensemble object?
 #'
-#' is.ensemble tests whether an object inherits from the ensemble class.
+#' is.ensemble tests whether an object inherits from the mg_ensemble class.
 #'
-#' @param x An object to be tested for membership in the S3 ensemble class
+#' @param x An object to be tested for membership in the S3 mg_ensemble class
 #'
 #' @export
 is.ensemble <- function(x) {
-	inherits(x, "ensemble")
+	inherits(x, "mg_ensemble")
 }
+
+

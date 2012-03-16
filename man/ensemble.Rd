@@ -2,12 +2,19 @@
 \alias{ensemble}
 \title{Performs group-wise modelling on a data frame}
 \usage{
-  ensemble(data, group, x_major = NULL, y_major = NULL,
-    model)
+  ensemble(data, groups, model, x_major = NULL,
+    y_major = NULL)
 }
 \arguments{
   \item{data}{a data frame to apply group-wise modelling
   to}
+
+  \item{groups}{a variable that provides a group identifier
+  for doing group_wise modelling.}
+
+  \item{model}{Information necessary to identify and apply
+  a regression method. this information should be supplied
+  as the output of a call to \code{\link{model}}.}
 
   \item{x_major}{a character string that specifies the
   variable to be on the major x axis when using the
@@ -18,10 +25,6 @@
   \item{y_major}{a character string that specifies the
   variable to be on the major y axis when using the
   ensemble to make glyph plots.}
-
-  \item{model}{Information necessary to identify and apply
-  a regression method. this information should be supplied
-  as the output of a call to \code{\link{model}}.}
 }
 \value{
   an S3 ensemble object.
