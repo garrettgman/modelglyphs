@@ -1,17 +1,17 @@
 geom_modelglyphs <- function(mapping = NULL, data = NULL, models = NULL, polar = FALSE, stat = "identity", position = "identity", ...) {
 	
-	# 1. interpret mapping correctly (directly feed correct functions for now)
-	# 2. check for x.minor and y.minor with stop message
+	# 2. check for x_minor and y_minor with stop message
 	err <- NULL
-	if(is.null(mappings$x.minor)) 
-		err <- paste(err, "x.minor")
-	if(is.null(mappings$y.minor)) 
-		err <- paste(err, "y.minor")
+	if(is.null(mappings$x_minor)) 
+		err <- paste(err, "x_minor")
+	if(is.null(mappings$y_minor)) 
+		err <- paste(err, "y_minor")
 	if(length(err) > 0)
 		stop(paste("geom_modelglyphs requires the following missing aesthetics:", err))
-	
-	# 3. create data set to feed to GeomLine
-	#	a. group - retrieve info from models
+		
+	# 3. check for group
+
+
 	glyph.df <- data.frame(group = attr(models, "group"))
 	
 	#	b. x, y - run x.minor and y.minor through glyphs
