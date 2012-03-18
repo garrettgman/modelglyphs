@@ -18,6 +18,8 @@
 #'
 #' @export
 ensemble <- function(data, groups, model, x_major = NULL, y_major = NULL) {
+	
+	
 
 	half.empty <- structure(list(), 
 		data_set = data, 
@@ -26,9 +28,8 @@ ensemble <- function(data, groups, model, x_major = NULL, y_major = NULL) {
 		y_major = y_major, 
 		model_info = model,
 		key = NULL,
-		collate = order(order(data$gid)),
+		collate = NULL,
 		class = c("mg_ensemble", "list"))
-	
 	update(half.empty)
 }
 
