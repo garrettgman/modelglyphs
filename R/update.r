@@ -1,15 +1,23 @@
 #' @S3method update mg_ensemble
 update.mg_ensemble <- function(object, data_set = data_set(object), groups = groups(object), x_major = x_major(object), y_major = y_major(object), model_info = model_info(object),...) {
 	
+	if (length(match.call()) > 2) {
+		data_set(object) <- data_set
+		groups(object) <- groups
+		x_major(object) <- x_major
+		y_major(object) <- y_major
+		model_info(object) <- model_info
+	}
+	
 	# 1. figure out grouping
-	data_set$gid <- grouping(data, groups)
+	data_set$gid <- gid(ensemble)
 	collate <- order(order(data$gid))
 	
 	# 2. build models
-	models <- build_models(data_set, model_info)
+	models <- build_models(object)
 	
 	# 3. make group location key
-	key <- make_key(data_set, groups, x_major, y_major)
+	key <- key(ens)
 	
 	# 4. record model info with a time stamp
 
