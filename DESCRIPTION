@@ -16,23 +16,12 @@ Depends:
     R (>= 2.14)
 Collate:
     'ensemble.r'
-    'ensemble-class.R'
     'lm-methods.r'
-    'not-yet-working.r'
     'util.r'
-    'geom_modelglyphs.R'
     'glyph.r'
     'autoplot.r'
     'mg_grouping-class.r'
-    'set
-    the
-    x_major
-    attribute
-    of
-    an
-    mg_ensemble
-    object.'
     'mg_ensemble-class.r'
-    'ensemble-settors.r'
-    'model.R'
-    'update.R'
+    'model.r'
+    'update.r'
+    'accessors.r'

@@ -1,8 +1,8 @@
-#' @include mg_ensemble-class.r
 #' @include update.r
+#' @include mg_ensemble-class.r
+NULL
 
 #' Get/set the x_major attribute of an mg_ensemble object.
-#'
 #' @aliases x_major x_major<-
 #' @param x An object of class mg_ensemble
 #' @export x_major "x_major<-"

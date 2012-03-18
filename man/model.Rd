@@ -2,15 +2,15 @@
 \alias{model}
 \title{Pass modelling information to ensemble()}
 \usage{
-  model(formula, type = "lm", ...)
+  model(formula, FUN = "lm", ...)
 }
 \arguments{
   \item{formula}{A formula object to be used in the
   intended model}
 
-  \item{type}{a character string that identifies the type
-  of modelling method to be used. type should match the
-  name of a modelling function in R}
+  \item{FUN}{a character string that identifies the type of
+  modelling method to be used. FUN should match the name of
+  a modelling function in R}
 
   \item{...}{other arguments to pass to the modelling
   function indicated by type}
