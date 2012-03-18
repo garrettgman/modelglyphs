@@ -9,7 +9,7 @@
 #' @param ... other arguments to pass to the modelling function indicated by type
 #'
 #' @keywords internal
-#' export 
+#' @export 
 model <- function(formula, FUN = "lm", ...) {
 	mod <- structure(as.list(match.call()[-1]), class = c("mg_model", "list"))
 	if (is.null(mod$formula)) stop("missing formula argument")
@@ -17,15 +17,10 @@ model <- function(formula, FUN = "lm", ...) {
 	mod
 }
 
-
-
+#' is an object of class mg_model?
+#' 
+#' @param x an object 
+#' @return A logical. TRUE is x inherits from calss mg_model. FALSE otherwise.
+#' @keywords internal
+#' @export
 is.model <- function(x) inherits(x, "mg_model")
-
-fit_model <- function(model) {
-	stopifnot(is.model(model))
-	FUN <- model$FUN
-	model <- model[setdiff(names(model), "FUN")]
-	function(data, ...){
-		do.call(FUN, c(data = substitute(data), model, list(...)))
-	}
-}

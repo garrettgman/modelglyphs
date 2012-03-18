@@ -22,6 +22,5 @@
   ensemble objects. model does not collect the name of the
   data set to be used.
 }
-\keyword{export}
 \keyword{internal}
 
