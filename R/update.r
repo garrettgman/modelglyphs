@@ -9,15 +9,12 @@ update.mg_ensemble <- function(object, data_set = data_set(object), groups = gro
 		model_info(object) <- model_info
 	}
 	
-	# 1. figure out grouping
-	data_set$gid <- gid(ensemble)
-	collate <- order(order(data$gid))
+	attr(object, "data_set")$gid <- gid(object)
+	collate <- order(order(attr(object, "data_set")$gid))
+	key <- key(object)
 	
-	# 2. build models
 	models <- build_models(object)
 	
-	# 3. make group location key
-	key <- key(ens)
 	
 	# 4. record model info with a time stamp
 

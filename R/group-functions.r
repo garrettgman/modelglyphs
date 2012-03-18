@@ -8,7 +8,7 @@
 #' @keywords internal
 #' @export
 gid <- function(ens) {
-	ens$groups$FUN(ens$data_set)	
+	groups(ens)$FUN(data_set(ens))	
 }
 
 #' Create a key to match group id's with x and y locations on a plot
@@ -22,15 +22,15 @@ gid <- function(ens) {
 #' @export
 key <- function(ens) {
 	
-	if (!("gid" %in% names(ens$data_set))) {
-		ens$data_set$gid <- gid(ens)
+	if (!("gid" %in% names(data_set(ens)))) {
+		data_set(ens)$gid <- gid(ens)
 	}
 	
 	get_majors <- function(df) {
-		c(df[[ens$x_major]][1], df[[ens$y_major]][1]) 
+		c(df[[x_major(ens)]][1], df[[y_major(ens)]][1]) 
 	}
 	
-	ddply(ens$data_set, "gid", get_majors) 
+	ddply(data_set(ens), "gid", get_majors) 
 }
 
 
@@ -50,7 +50,7 @@ cross <- function(var1, var2, drop = TRUE) {
 	stopifnot(is.character(var1) & is.character(var2))
 	
 	FUN <- function(data, ...) {
-		id(c(data[[var1]], data[[var2]]), drop)
+		id(list(data[[var1]], data[[var2]]), drop)
 	}
 
 	structure(list(variables = c(var1, var2), FUN = FUN), 

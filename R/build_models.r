@@ -1,4 +1,4 @@
-#' @include mg_model-class.r
+#' @include model.r
 NULL
 
 #' Performs group-wise maodelling on an mg_ensemble object
@@ -15,8 +15,9 @@ NULL
 #' @export 
 build_models <- function(ensemble) {
 	data <- exclude_group_vars(ensemble)
-	FUN <- fit_model(ensemble$model_info)
-	dlply(data, "gid", FUN)
+	FUN <- fit_model(model_info(ensemble))
+	dlply(data, "gid", FUN) # For Hadley: why doesn't this work?
+	# this works: FUN <- lm(data, formula = Fertility ~ Agriculture)
 }
 
 
@@ -24,13 +25,13 @@ fit_model <- function(model) {
 	stopifnot(is.model(model))
 	FUN <- model$FUN
 	model <- model[setdiff(names(model), "FUN")]
-	function(data, ...){
-		do.call(FUN, c(data = substitute(data), model, list(...)))
+	function(data){
+		do.call(FUN, c(data = substitute(data), model))
 	}
 }
 
 exclude_group_vars <- function(ens) {
 	# note: still would be better to just test which variables co-vary with gid
-	ens$data_set[, setdiff(names(ens$data_set), ens$groups[["variables"]])]
+	data_set(ens)[, setdiff(names(data_set(ens)), groups(ens)[["variables"]])]
 }
 	
