@@ -24,6 +24,5 @@ Collate:
     'model.r'
     'update.r'
     'accessors.r'
-    'mg_model-class.r'
     'build_models.r'
     'group-functions.r'
