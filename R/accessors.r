@@ -77,7 +77,12 @@ data_set <- function(x) {
 #' @export model_info "model_info<-"
 model_info <- function(x) {
 	stopifnot(is.ensemble(x))
-	attr(x, "mod_type")
+	attr(x, "model_info")
+}
+
+"model_info<-" <- function(x, value) {
+	stopifnot(is.ensemble(x))
+	attr(x, "model_info") <- value
 	update(x)
 }
 
