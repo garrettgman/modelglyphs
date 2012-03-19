@@ -2,10 +2,10 @@
 \alias{llply_ensemble}
 \title{Performs llply, then reorders output and returns as a vector}
 \usage{
-  llply_ensemble(model, FUN, ...)
+  llply_ensemble(ens, FUN, ...)
 }
 \arguments{
-  \item{model}{An ensemble object}
+  \item{ens}{A mg_ensemble object}
 
   \item{FUN}{A function to be applied to the model objectss
   in the ensemble object}

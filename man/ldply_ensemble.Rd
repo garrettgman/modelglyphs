@@ -2,10 +2,10 @@
 \alias{ldply_ensemble}
 \title{Performs ldply, then labels and reorders output}
 \usage{
-  ldply_ensemble(model, FUN, ...)
+  ldply_ensemble(ens, FUN, ...)
 }
 \arguments{
-  \item{model}{An ensemble object}
+  \item{ens}{An ensemble object}
 
   \item{FUN}{A function to be applied to the model objectss
   in the ensemble object}
