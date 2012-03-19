@@ -1,7 +1,8 @@
 #' S3method AIC mg_ensemble
 AIC.mg_ensemble <- function(object, ..., k = 2) {
 	aics <- ldply(object, AIC, ..., k)
-	renamed(aics, 2, "aic")
+	output <- renamed(aics, 2, "aic")
+	add_class(output, "mg_AIC")
 }
 
 
@@ -19,7 +20,8 @@ anova.mg_ensemble <- function(object, ...){
 	}
 	
 	df <- ldply(object, anova_df, ...)
-	add_labels(df, object)
+	output <- add_labels(df, object)
+	add_class(output, "mg_anova")
 }
 
 #' S3method case.names mg_ensemble
@@ -31,7 +33,8 @@ case.names.mg_ensemble <- function(object, ...){
 coef.mg_ensemble <- function(object, ...){
 	coefs <- ldply(object, coef)
 	coefs <- reshape2::melt(coefs, id = "gid", value.name = "coefficient")
-	add_labels(coefs, object)
+	output <- add_labels(coefs, object)
+	add_class(output, "mg_coef")
 }
 
 #' S3method confint mg_ensemble
@@ -43,6 +46,7 @@ confint.mg_ensemble <- function(object, ...){
 	}
 	df <- ldply(object, get_conf, ...)
 	add_labels(df, object)
+	output <- add_class(output, "mg_confint")
 }
 
 #' S3method cooks.distance mg_ensemble
@@ -54,7 +58,8 @@ cooks.distance.mg_ensemble <- function(model, ...){
 deviance.mg_ensemble <- function(object, ...) {
 	devs <- ldply(object, deviance, ...)
 	df <- renamed(devs, 2, "deviance")
-	add_labels(df, object)
+	output <- add_labels(df, object)
+	add_class(output, "mg_deviance")
 }
 
 #' S3method dfbeta mg_ensemble
@@ -62,7 +67,8 @@ dfbeta.mg_ensemble <- function(model, ...) {
 	dfbeta_df <- function(model, ...) {
 		as.data.frame(dfbeta(model))
 	}
-	ldply_ensemble(model, dfbeta_df, ...)
+	ouput <- ldply_ensemble(model, dfbeta_df, ...)
+	add_class(output, "mg_dfbeta")
 }
 
 #' S3method dfbetas mg_ensemble
@@ -70,7 +76,8 @@ dfbetas.mg_ensemble <- function(model, ...) {
 	dfbetas_df <- function(model, ...) {
 		as.data.frame(dfbetas(model))
 	}
-	ldply_ensemble(model, dfbetas_df, ...)
+	output <- ldply_ensemble(model, dfbetas_df, ...)
+	add_class(output, "mg_dfbetas")
 }
 
 #' S3method drop1 mg_ensemble
@@ -85,7 +92,8 @@ drop1.mg_ensemble <- function(object, ...) {
 	}
 	
 	df <- ldply(object, drop1_df, ...)
-	add_labels(df, object)
+	output <- add_labels(df, object)
+	add_class(output, "mg_drop1")
 }
 
 #' S3method dummy.coef mg_ensemble
@@ -95,7 +103,8 @@ dummy.coef.mg_ensemble <- function(object, ...) {
 		data.frame(variable = names(dlist), coef = unlist(dlist))
 	}
 	df <- ldply(object, dummy_df, ...)
-	add_labels(df, object)
+	output <- add_labels(df, object)
+	add_class(output, "mg_dummy.coef")
 }
 
 #' S3method effects mg_ensemble
@@ -135,7 +144,8 @@ formula.mg_ensemble <- function(x, ...) {
 
 #' S3method fortify mg_ensemble
 fortify.mg_ensemble <- function(model, data = NULL, ...) {
-	ldply_ensemble(model, fortify, ...)
+	output <- ldply_ensemble(model, fortify, ...)
+	add_class(output, "mg_fortify")
 }
 
 #' S3method hatvalues mg_ensemble
@@ -153,24 +163,28 @@ influence.mg_ensemble <- function(model, ...) {
 			as.data.frame(ins$coefficients)
 		)
 	}
-	ldply_ensemble(model, influence_df, ...)
+	output <- ldply_ensemble(model, influence_df, ...)
+	add_class(output, "mg_influence")
 }
 
 #' S3method kappa mg_ensemble
 kappa.mg_ensemble <- function(z, ...) {
 	kaps <- ldply(z, kappa, ...)
-	renamed(kaps, 2, "kappa")
+	output <- renamed(kaps, 2, "kappa")
+	add_class(output, "mg_kappa")
 }
 
 #' S3method logLik mg_ensemble
 logLik.mg_ensemble <- function(object, ...) {
 	lls <- ldply(object, logLik, ...)
-	renamed(lls, 2, "logLik")
+	output <- renamed(lls, 2, "logLik")
+	add_class(output, "mg_logLik")
 }
 
 #' S3method model.frame mg_ensemble
 model.frame.mg_ensemble <- function(formula, ...) {
-	ldply_ensemble(formula, model.frame, ...)
+	output <- ldply_ensemble(formula, model.frame, ...)
+	add_class(output, "mg_model.frame")
 }
 
 #' S3method model.matrix mg_ensemble
@@ -180,13 +194,15 @@ model.matrix.mg_ensemble <- function(object, ...) {
 		names(df)[names(df) == "X.Intercept."] <- "(Intercept)"
 		df
 	}
-	ldply_ensemble(object, model.matrix_df, ...)
+	output <- ldply_ensemble(object, model.matrix_df, ...)
+	add_class(output, "mg_model.matrix")
 }
 
 #' S3method nobs mg_ensemble
 nobs.mg_ensemble <- function(object, ...) {
 	obns <- ldply(object, nobs, ...)
-	renamed(obns, 2, "nobs")
+	output <- renamed(obns, 2, "nobs")
+	add_class(output, "mg_nobs")
 }
 
 #' S3method predict mg_ensemble
@@ -199,7 +215,8 @@ predict.mg_ensemble <- function(object, newdata = NULL, ...){
 			newdata
 		}
 		df <- ldply(object, predict_df, newdata, ...)
-		add_labels(df, object)
+		output <- add_labels(df, object)
+		add_class(output, "mg_predict")
 	}	
 }
 
@@ -210,7 +227,8 @@ proj.mg_ensemble <- function(object, ...){
 		names(df)[names(df) == "X.Intercept."] <- "(Intercept)"
 		df
 	}
-	ldply_ensemble(object, proj_df, ...)
+	output <- ldply_ensemble(object, proj_df, ...)
+	add_class(output, "mg_proj")
 }
 
 #' S3method residuals mg_ensemble
@@ -231,22 +249,26 @@ rstudent.mg_ensemble <- function(model, ...){
 
 #' S3method simulate mg_ensemble
 simulate.mg_ensemble <- function(object, ...){
-	ldply_ensemble(object, simulate, ...)
+	output <- ldply_ensemble(object, simulate, ...)
+	add_class(output, "mg_simulate")
 }
 
 #' S3method summary mg_ensemble
 summary.mg_ensemble <- function(object, ...){
-	lapply(object, summary, ...)
+	output <- lapply(object, summary, ...)
+	add_class(output, "mg_summary")
 }
 
 #' S3method variable.names mg_ensemble
 variable.names.mg_ensemble <- function(object, ...){
-	variable.names(object[[1]], ...)
+	output <- variable.names(object[[1]], ...)
+	add_class(output, "mg_variable.names")
 }
 
 #' S3method vcov mg_ensemble
 vcov.mg_ensemble <- function(object, ...){
-	lapply(object, vcov, ...)
+	output <- lapply(object, vcov, ...)
+	add_class(output, "mg_vcov")
 }
 
 #' S3method weights mg_ensemble
