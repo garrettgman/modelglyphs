@@ -12,12 +12,12 @@ renamed <- function(df, index, name) {
 #' @keywords internal
 #' @export
 add_labels <- function(df, ens) {
-	x <- attr(ens, "x")[df$gid]
-	y <- attr(ens, "y")[df$gid]
+	x <- key(ens)$x[df$gid]
+	y <- key(ens)$y[df$gid]
 	
 	vars <- setdiff(names(df), "gid")
 	new <- data.frame(cbind(df$gid, x, y, df[ , vars]))
-	names(new) <- c("gid", attr(ens, "x_name"), attr(ens, "y_name"), vars)
+	names(new)[1] <- "gid"
 	new
 }
 
@@ -29,16 +29,16 @@ add_labels <- function(df, ens) {
 #' be immediately applied to the output without preprocessing it. The output can also 
 #' be merged to the original data frame with cbind.
 #'
-#' @param model An ensemble object
+#' @param ens An ensemble object
 #' @param FUN A function to be applied to the model objectss in the ensemble object
 #' @param arguments to be passed to FUN
 #'
 #' @keywords internal
 #' @export
-ldply_ensemble <- function(model, FUN, ...) {
-	df <- ldply(model, FUN, ...)
-	df <- add_labels(df, model)[attr(model, "reorder"), ]
-	row.names(df) <- attr(model, "row.names")
+ldply_ensemble <- function(ens, FUN, ...) {
+	df <- ldply(ens, FUN, ...)
+	df <- add_labels(df, ens)[collate(ens), ]
+	row.names(df) <- attr(data_set(ens), "row.names")
 	df
 }
 
@@ -49,13 +49,13 @@ ldply_ensemble <- function(model, FUN, ...) {
 #' be merged to the original data frame with cbind. Or by directly saving it as a new 
 #' column in the dataframe.
 #'
-#' @param model An ensemble object
+#' @param ens A mg_ensemble object
 #' @param FUN A function to be applied to the model objectss in the ensemble object
 #' @param arguments to be passed to FUN
 #'
 #' @keywords internal
 #' @export
-llply_ensemble <- function(model, FUN, ...) {
-	df <- unlist(llply(model, FUN, ...), recursive = TRUE, use.names = FALSE)
-	df[attr(model, "reorder")]
+llply_ensemble <- function(ens, FUN, ...) {
+	vec <- unlist(llply(ens, FUN, ...), recursive = TRUE, use.names = FALSE)
+	vec[collate(ens)]
 }
