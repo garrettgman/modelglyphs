@@ -86,3 +86,12 @@ model_info <- function(x) {
 	update(x)
 }
 
+
+#' Get the collate attribute of an mg_ensemble object.
+#'
+#' @param x An object of class mg_ensemble
+#' @export
+collate <- function(x) {
+	stopifnot(is.ensemble(x))
+	attr(x, "collate")
+}
