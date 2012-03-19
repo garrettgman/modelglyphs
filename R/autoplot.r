@@ -17,3 +17,12 @@ autoplot.mg_coef <- function(object, variable = NULL, ...) {
 
 
 # e2 <- ensemble(nasa, cross("long", "lat"), model(surftemp ~ temperature), "long", "lat")
+
+
+#' @S3method autoplot mg_ensemble
+autoplot.mg_ensemble <- function(object, ...) {
+	require(ggplot2)
+	get_r2 <- function(mod) summary(mod)$adj.r.squared
+	object <- add_labels(ldply(object, get_r2), object)
+	qplot(x, y, data = object, geom = "point", size = V1)
+}
