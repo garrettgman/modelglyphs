@@ -5,6 +5,7 @@ autoplot.glyphplot <- function(object, ...) {
 }
 
 
+#' @param variable the name of the variable, as a character vector
 #' @S3method autoplot mg_coef
 autoplot.mg_coef <- function(object, variable = NULL, ...) {
 	require(ggplot2)

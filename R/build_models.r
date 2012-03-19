@@ -22,11 +22,15 @@ build_models <- function(ensemble) {
 
 fit_model <- function(model) {
 	stopifnot(is.model(model))
-	FUN <- model$FUN
-	model <- model[setdiff(names(model), "FUN")]
-	function(data){
-		do.call(FUN, c(data = list(data), model))
-		# do.call(FUN, c(data = substitute(data), model)) # For Hadley: why doesn't this work?
+
+	model_args <- c(list(
+	    as.name(model$FUN), 
+	    formula = model$formula, 
+		data = as.name("data")), model$args)
+	model_call <- as.call(model_args)
+
+	function(data) {
+		eval(model_call)
 	}
 }
 

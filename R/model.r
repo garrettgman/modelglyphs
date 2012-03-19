@@ -11,10 +11,17 @@
 #' @keywords internal
 #' @export 
 model <- function(formula, FUN = "lm", ...) {
-	mod <- structure(as.list(match.call()[-1]), class = c("mg_model", "list"))
-	if (is.null(mod$formula)) stop("missing formula argument")
-	if (is.null(mod$FUN)) mod$FUN <- "lm"
-	mod
+	
+	list(
+	  FUN = FUN,
+	  formula = formula,
+	  args = list(...)
+	)
+	
+	# mod <- structure(as.list(match.call()[-1]), class = c("mg_model", "list"))
+	#if (is.null(mod$formula)) stop("missing formula argument")
+	# if (is.null(mod$FUN)) mod$FUN <- "lm"
+	# mod
 }
 
 #' is an object of class mg_model?
