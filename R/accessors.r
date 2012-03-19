@@ -87,11 +87,34 @@ model_info <- function(x) {
 }
 
 
-#' Get the collate attribute of an mg_ensemble object.
+#' Get/set the collate attribute of an mg_ensemble object.
 #'
+#' @aliases collate collate<-
 #' @param x An object of class mg_ensemble
-#' @export
+#' @export collate "collate<-"
 collate <- function(x) {
 	stopifnot(is.ensemble(x))
 	attr(x, "collate")
+}
+
+"collate<-" <- function(x, value) {
+	stopifnot(is.ensemble(x))
+	attr(x, "collate") <- value
+	x
+}
+
+#' Get/set the key attribute of an mg_ensemble object.
+#'
+#' @aliases collate collate<-
+#' @param x An object of class mg_ensemble
+#' @export collate "collate<-"
+key <- function(x) {
+	stopifnot(is.ensemble(x))
+	attr(x, "key")
+}
+
+"key<-" <- function(x, value) {
+	stopifnot(is.ensemble(x))
+	attr(x, "key") <- value
+	x
 }
