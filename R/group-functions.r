@@ -27,7 +27,7 @@ key <- function(ens) {
 	}
 	
 	get_majors <- function(df) {
-		c(df[[x_major(ens)]][1], df[[y_major(ens)]][1]) 
+		c(x = df[[x_major(ens)]][1], y = df[[y_major(ens)]][1]) 
 	}
 	
 	ddply(data_set(ens), "gid", get_majors) 
