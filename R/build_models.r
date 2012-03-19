@@ -9,8 +9,7 @@ NULL
 #' groupings align with the grouping information stored in the mg_ensemble 
 #' object's groupa attribute.
 #'
-#' @param data A data frame with a variable named "gid."
-#' @param model A mg_model object
+#' @param ensemble An mg_ensemble object
 #' @keywords internal
 #' @export 
 build_models <- function(ensemble) {
