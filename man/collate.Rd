@@ -1,6 +1,7 @@
 \name{collate}
 \alias{collate}
-\title{Get the collate attribute of an mg_ensemble object.}
+\alias{collate<-}
+\title{Get/set the collate attribute of an mg_ensemble object.}
 \usage{
   collate(x)
 }
@@ -8,6 +9,6 @@
   \item{x}{An object of class mg_ensemble}
 }
 \description{
-  Get the collate attribute of an mg_ensemble object.
+  Get/set the collate attribute of an mg_ensemble object.
 }
 

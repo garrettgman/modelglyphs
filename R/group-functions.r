@@ -13,14 +13,14 @@ gid <- function(ens) {
 
 #' Create a key to match group id's with x and y locations on a plot
 #'
-#' key uses the x_major, y_major, and groups attributes of an mg_ensemble 
+#' make_key uses the x_major, y_major, and groups attributes of an mg_ensemble 
 #' object to create a dataframe that shows where each group should be plotted 
 #' according to an x_major and y_major axis.
 #' 
 #' @param ens an object of class mg_ensemble
 #' @keywords internal
 #' @export
-key <- function(ens) {
+make_key <- function(ens) {
 	
 	if (!("gid" %in% names(data_set(ens)))) {
 		data_set(ens)$gid <- gid(ens)

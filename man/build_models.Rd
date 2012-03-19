@@ -5,9 +5,7 @@
   build_models(ensemble)
 }
 \arguments{
-  \item{data}{A data frame with a variable named "gid."}
-
-  \item{model}{A mg_model object}
+  \item{ensemble}{An mg_ensemble object}
 }
 \description{
   build_models fits the model specified by an mg_ensemble's
