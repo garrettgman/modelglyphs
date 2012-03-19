@@ -7,6 +7,22 @@ renamed <- function(df, index, name) {
 	df
 }
 
+#' add a class attribute
+#'
+#' add_class adds the specified class to the beginning of an object's class attribute vector. The object retains all previous class memberships.
+#'
+#' @param x an object to be given a new class 
+#' @param new.class a character string
+#' @keywords internal
+#' @export
+add_class <- function(x, new.class) {
+	vec <- class(x)
+	class(x) <- c(new.class, vec)
+	x
+}
+
+
+
 #' Add the x_major and y_major variables to a dataframe with gid
 #'
 #' @keywords internal
