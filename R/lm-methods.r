@@ -207,8 +207,14 @@ nobs.mg_ensemble <- function(object, ...) {
 
 #' S3method predict mg_ensemble
 predict.mg_ensemble <- function(object, newdata = NULL, ...){
-	if (is.null(match.call()$newdata)) {
-		llply_ensemble(object, predict, ...)
+	if (is.null(newdata)) {
+		predict_df <- function(object, newdata, ...){
+			.predict <- predict(object, ...)
+			as.data.frame(.predict)
+		}
+		df <- ldply(object, predict_df, newdata, ...)
+		output <- add_labels(df, object)[collate(object),]
+		row.names(output) <- row.names(data_set(object))
 	} else {
 		predict_df <- function(object, newdata, ...){
 			newdata$.predict <- predict(object, newdata, ...)
@@ -216,8 +222,8 @@ predict.mg_ensemble <- function(object, newdata = NULL, ...){
 		}
 		df <- ldply(object, predict_df, newdata, ...)
 		output <- add_labels(df, object)
-		add_class(output, "mg_predict")
-	}	
+	}
+	add_class(output, "mg_predict")	
 }
 
 #' S3method proj mg_ensemble
