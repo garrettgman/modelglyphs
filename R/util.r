@@ -33,7 +33,7 @@ add_labels <- function(df, ens) {
 	
 	vars <- setdiff(names(df), "gid")
 	new <- data.frame(cbind(df$gid, x, y, df[ , vars]))
-	names(new)[1] <- "gid"
+	names(new) <- c("gid", "x", "y", vars)
 	new
 }
 
