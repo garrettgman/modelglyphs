@@ -16,8 +16,7 @@ NULL
 build_models <- function(ensemble) {
 	data <- exclude_group_vars(ensemble)
 	FUN <- fit_model(model_info(ensemble))
-	dlply(data, "gid", FUN) # For Hadley: why doesn't this work?
-	# this works: FUN <- lm(data, formula = Fertility ~ Agriculture)
+	dlply(data, "gid", FUN) 
 }
 
 
@@ -26,7 +25,8 @@ fit_model <- function(model) {
 	FUN <- model$FUN
 	model <- model[setdiff(names(model), "FUN")]
 	function(data){
-		do.call(FUN, c(data = substitute(data), model))
+		do.call(FUN, c(data = list(data), model))
+		# do.call(FUN, c(data = substitute(data), model)) # For Hadley: why doesn't this work?
 	}
 }
 
