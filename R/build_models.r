@@ -23,7 +23,7 @@ fit_model <- function(model) {
 	stopifnot(is.model(model))
 
 	model_args <- c(list(
-	    as.name(model$FUN), 
+	    get(model$FUN, envir = .GlobalEnv), 
 	    formula = model$formula, 
 		data = as.name("data")), model$args)
 	model_call <- as.call(model_args)
