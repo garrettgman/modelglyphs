@@ -1,8 +1,8 @@
 #' @S3method format mg_ensemble
 format.mg_ensemble <- function(x, ...) {
 	cat(paste("ensemble of", length(x), "models:"), 
-		paste("\nmethod =", attr(x, "method"), "\nformula =", 
-		deparse(attr(x, "formula"))))
+		paste("\nmethod =", model_info(x)$FUN, "\nformula =", 
+		deparse(model_info(x)$formula)))
 }
 
 #' @S3method print mg_ensemble
