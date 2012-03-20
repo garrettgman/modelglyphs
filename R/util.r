@@ -21,6 +21,21 @@ add_class <- function(x, new.class) {
 	x
 }
 
+#' switch the first class attribute
+#'
+#' switch_class replaces the first element of an object's class vector with the 
+#' specified class. The object retains all other class memberships.
+#'
+#' @param x an object to be given a new class 
+#' @param new.class a character string
+#' @keywords internal
+#' @export
+switch_class <- function(x, new.class) {
+	vec <- class(x)[-1]
+	class(x) <- c(new.class, vec)
+	x
+}
+
 
 
 #' Add the x_major and y_major variables to a dataframe with gid
