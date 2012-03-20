@@ -38,18 +38,18 @@ get_model <- function(i) {
 # Disavantage: have to know about R5 calling conventions, or create
 #   save_model/get_model accessor functions
 
-ModelList <- setRefClass(fields = c("models" = list), methods = list(
-	save_model = function(model) {
-		models <<- c(models, model)
-		invisible(TRUE)
-	},
-	get_model = function(i) {
-		models[[i]]
-	}
-))
-mg_list <- ModelList$new()
-mg_list$save_model()
-mg_list$get_model()
+#ModelList <- setRefClass(fields = c("models" = list), methods = list(
+#	save_model = function(model) {
+#		models <<- c(models, model)
+#		invisible(TRUE)
+#	},
+#	get_model = function(i) {
+#		models[[i]]
+#	}
+#))
+#mg_list <- ModelList$new()
+#mg_list$save_model()
+#mg_list$get_model()
 
 
 
