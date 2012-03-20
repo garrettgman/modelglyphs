@@ -31,6 +31,8 @@ autoplot.mg_ensemble <- function(object, ...) {
 #' @param title Optional. The title of the graph as a character string.
 #' @export
 significance_plot <- function(data, p.value, color = NULL, title = "", ...) {
+	require(ggplot2)
+	
 	if (substr(class(data)[1], 1, 3) != "mg_") {
 		stop("data is not a recognized modelglyphs class")
 	}
