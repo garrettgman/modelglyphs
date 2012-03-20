@@ -29,13 +29,6 @@ case.names.mg_ensemble <- function(object, ...){
 	llply_ensemble(object, case.names, ...)
 }
 
-#' S3method coef mg_ensemble
-coef.mg_ensemble <- function(object, ...){
-	coefs <- ldply(object, coef)
-	coefs <- reshape2::melt(coefs, id = "gid", value.name = "coefficient")
-	output <- add_labels(coefs, object)
-	add_class(output, "mg_coef")
-}
 
 #' S3method confint mg_ensemble
 confint.mg_ensemble <- function(object, ...){
@@ -257,12 +250,6 @@ rstudent.mg_ensemble <- function(model, ...){
 simulate.mg_ensemble <- function(object, ...){
 	output <- ldply_ensemble(object, simulate, ...)
 	add_class(output, "mg_simulate")
-}
-
-#' S3method summary mg_ensemble
-summary.mg_ensemble <- function(object, ...){
-	output <- lapply(object, summary, ...)
-	add_class(output, "mg_summary")
 }
 
 #' S3method variable.names mg_ensemble

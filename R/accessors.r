@@ -1,5 +1,5 @@
 #' @include update.r
-#' @include mg_ensemble-class.r
+#' @include ensemble.r
 NULL
 
 #' Get/set the x_major attribute of an mg_ensemble object.
