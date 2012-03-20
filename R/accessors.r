@@ -76,7 +76,7 @@ data_set <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export model_info "model_info<-"
 model_info <- function(x) {
-	stopifnot(is.ensemble(x))
+	# stopifnot(is.ensemble(x))
 	attr(x, "model_info")
 }
 
