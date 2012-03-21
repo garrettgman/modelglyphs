@@ -104,8 +104,6 @@ magnitude_plot <- function(data, magnitude, title = "", ...) {
 		ylab(y_major(data))
 }
 	
-# scatter_plot
-# residuals by temperature
 #' Quickly plot scatterplots of ensemble model data
 #'
 #' scatter_plot plots data derived from an mg_ensemble object. The x_major and y_major attributes of the mg_ensemble are used as the x and y axes of the plot. Each model in the ensemble is mapped to a small cloud of points. These small scatterplots are generated according to the x.minor and y.minor arguments of scatter_plot. The resulting plot is placed into the larger plot according to the model's location relative to x_major and y_major. 
@@ -115,16 +113,20 @@ magnitude_plot <- function(data, magnitude, title = "", ...) {
 #' @param data Any type of data object whose class is defined in the modelglyphs package. The class of the object will begin with "mg_".
 #' @param x.minor The name of the variable in data to be used as the x axis when generating each individual scatterplot. x.minor does not need to be related to the x_major attribute of the parent mg_ensemble object. 
 #' @param y.minor The name of the variable in data to be used as the y axis when generating each individual scatterplot. y.minor does not need to be related to the y_major attribute of the parent mg_ensemble object.
+#' @param x.scale,y.scale The scaling function to be applied to each set of
+#'  minor values within a grid cell.
 #' @param title Optional. The title of the graph as a character string.
 #' @export
-scatter_plot <- function(data, x.minor, y.minor, title = "", ...) {
+scatter_plot <- function(data, x.minor, y.minor, x.scale = identity, 
+	y.scale = identity, title = "", ...) {
 	require(ggplot2)
 	
 	if (!is.mg(data)) {
 		stop("data is not a recognized modelglyphs class")
 	}
 	
-	g.data <- suppressMessages(glyphs(data, x.minor, y.minor))
+	g.data <- suppressMessages(glyphs(data, x.minor, y.minor, 
+		x_scale = x.scale, y_scale = y.scale))
 		
 	ggplot(g.data, aes(gx, gy, group = gid)) +
 		geom_point(...) +
@@ -133,7 +135,36 @@ scatter_plot <- function(data, x.minor, y.minor, title = "", ...) {
 		ylab(y_major(data))
 }
 
-# replace x and y with x_major and y_major consistently
 
-# lines_plot
+#' Quickly plot line plots of ensemble model data
+#'
+#' line_plot plots data derived from an mg_ensemble object. The x_major and y_major attributes of the mg_ensemble are used as the x and y axes of the plot. Each model in the ensemble is mapped to a line that simulates a line graph of x.minor vs. y.minor for the data in the model. These small line plots are generated according to the x.minor and y.minor arguments of line_plot. The resulting plot is placed into the larger plot according to the model's location relative to x_major and y_major. 
+#'
+#' Line plots are meant to be quick and exploratory. 
+#'
+#' @param data Any type of data object whose class is defined in the modelglyphs package. The class of the object will begin with "mg_".
+#' @param x.minor The name of the variable in data to be used as the x axis when generating each individual scatterplot. x.minor does not need to be related to the x_major attribute of the parent mg_ensemble object. 
+#' @param y.minor The name of the variable in data to be used as the y axis when generating each individual scatterplot. y.minor does not need to be related to the y_major attribute of the parent mg_ensemble object.
+#' @param x.scale,y.scale The scaling function to be applied to each set of
+#'  minor values within a grid cell.
+#' @param title Optional. The title of the graph as a character string.
+#' @export
+line_plot <- function(data, x.minor, y.minor, x.scale = identity, y.scale = identity,  
+	title = "", ...) {
+	require(ggplot2)
+	
+	if (!is.mg(data)) {
+		stop("data is not a recognized modelglyphs class")
+	}
+	
+	g.data <- suppressMessages(glyphs(data, x.minor, y.minor, 
+		x_scale = x.scale, y_scale = y.scale))
+		
+	ggplot(g.data, aes(gx, gy, group = gid)) +
+		geom_line(...) +
+		opts(title = title) + 
+		xlab(x_major(data)) +
+		ylab(y_major(data))
+}
+
 
