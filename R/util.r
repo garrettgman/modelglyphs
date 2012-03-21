@@ -48,8 +48,43 @@ add_labels <- function(df, ens) {
 	
 	vars <- setdiff(names(df), "gid")
 	new <- data.frame(cbind(df$gid, x, y, df[ , vars]))
-	names(new) <- c("gid", "x", "y", vars)
+	names(new) <- c("gid", x_major(ens), y_major(ens), vars)
 	new
+}
+
+#' Coerce an object to a modelglyphs class
+#'
+#' mg coerces an object to the modelglyphs class specified by the class argument. 
+#'
+#' @keywords internal
+#' @param x An object to be coerced to a modelglyphs class.
+#' @param ens An mg_ensemble object to borrow attributes from.
+#' @param class A chracter string. The name of the class to give the new object.
+#' @param collate logical. Should the output be arranged in the order of the data the mg_ensemble was fitted to and assigned the same row.names.
+#' @export
+mg <- function(x, ens, class, collate = FALSE) {
+
+	if (substr(class, 1, 3) != "mg_") {
+		stop("Invalid mg class name. Must begin with 'mg_'")
+	}
+	
+	x <- add_labels(x, ens)
+	
+	if (collate) {
+		if (nrow(x) == length(collate(ens))) {
+			x <- x[collate(ens), ]
+			row.names(x) <- attr(data_set(ens), "row.names")
+		} else {
+			message("collate did not occur:\nx and data have different lengths.")
+		}
+	}
+		
+	x <- add_class(x, class)
+	attr(x, "x_major") <- x_major(ens)
+	attr(x, "y_major") <- y_major(ens)
+	attr(x, "model_info") <- model_info(ens)
+	
+	x
 }
 
 
