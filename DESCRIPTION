@@ -19,7 +19,6 @@ Collate:
     'lm-methods.r'
     'util.r'
     'glyph.r'
-    'autoplot.r'
     'model.r'
     'update.r'
     'accessors.r'
@@ -29,3 +28,5 @@ Collate:
     'save_model.r'
     'summary.r'
     'resid.r'
+    'model.frame.r'
+    'autoplot.r'

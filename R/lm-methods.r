@@ -174,12 +174,6 @@ logLik.mg_ensemble <- function(object, ...) {
 	add_class(output, "mg_logLik")
 }
 
-#' S3method model.frame mg_ensemble
-model.frame.mg_ensemble <- function(formula, ...) {
-	output <- ldply_ensemble(formula, model.frame, ...)
-	add_class(output, "mg_model.frame")
-}
-
 #' S3method model.matrix mg_ensemble
 model.matrix.mg_ensemble <- function(object, ...) {
 	model.matrix_df <- function(object, ...) {
