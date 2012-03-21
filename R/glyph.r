@@ -21,9 +21,9 @@ glyphs <- function(data, x_minor, y_minor, x_major = NULL, y_major = NULL, polar
     data$gid <- interaction(data[[x_major]], data[[y_major]], drop = TRUE)
   }
   
-  if (names(data)[1] == "gid" & is.null(x_major) & is.null(y_major)) {
-  	x_major <- names(data)[2]
-  	y_major <- names(data)[3]
+  if (is.mg(data) & is.null(x_major) & is.null(y_major)) {
+  	x_major <- x_major(data)
+  	y_major <- y_major(data)
   } else if (is.null(x_major) | is.null(y_major)) {
   	stop(paste("glyphs requires the following missing arguments:",
   	  "x_major"[is.null(x_major)], "y_major"[is.null(y_major)]))
