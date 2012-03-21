@@ -7,7 +7,7 @@ NULL
 #' @param x An object of class mg_ensemble
 #' @export x_major "x_major<-"
 x_major <- function(x) {
-	stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "x_major")
 }
 
@@ -24,7 +24,7 @@ x_major <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export y_major "y_major<-"
 y_major <- function(x) {
-	stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "y_major")
 }
 
@@ -41,7 +41,7 @@ y_major <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export groups "groups<-"
 groups <- function(x) {
-	stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "groups")
 }
 
@@ -57,7 +57,7 @@ groups <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export data_set "data_set<-"
 data_set <- function(x) {
-	stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "data_set")
 }
 
@@ -76,7 +76,7 @@ data_set <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export model_info "model_info<-"
 model_info <- function(x) {
-	# stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "model_info")
 }
 
@@ -93,7 +93,7 @@ model_info <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export collate "collate<-"
 collate <- function(x) {
-	stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "collate")
 }
 
@@ -109,7 +109,7 @@ collate <- function(x) {
 #' @param x An object of class mg_ensemble
 #' @export collate "collate<-"
 key <- function(x) {
-	stopifnot(is.ensemble(x))
+	stopifnot(is.mg(x))
 	attr(x, "key")
 }
 
@@ -117,4 +117,15 @@ key <- function(x) {
 	stopifnot(is.ensemble(x))
 	attr(x, "key") <- value
 	x
+}
+
+#' return the model call of an modelglyphs object
+#'
+#' mg_call returns the model call of a modelglyphs object as a character string.
+#'
+#' @param mg A modelglyphs object. The class of a modelglyphs object will begin with "mg_"
+#' @export
+mg_call <- function(mg){
+	info <- model_info(mg)
+	paste(info$FUN, "(", deparse(info$formula), ")", sep = "")
 }
