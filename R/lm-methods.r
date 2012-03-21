@@ -230,11 +230,6 @@ proj.mg_ensemble <- function(object, ...){
 	add_class(output, "mg_proj")
 }
 
-#' S3method residuals mg_ensemble
-residuals.mg_ensemble <- function(object, ...){
-	llply_ensemble(object, resid, ...)
-}
-
 
 #' S3method rstandard mg_ensemble
 rstandard.mg_ensemble <- function(model, ...){

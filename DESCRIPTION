@@ -28,3 +28,4 @@ Collate:
     'coef.r'
     'save_model.r'
     'summary.r'
+    'resid.r'
