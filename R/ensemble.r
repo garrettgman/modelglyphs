@@ -56,3 +56,14 @@ print.mg_ensemble <- function(x, ...) {
 is.ensemble <- function(x) {
 	inherits(x, "mg_ensemble")
 }
+
+#' Is x a modelglyphs object?
+#'
+#' is.mg tests whether an object inherits from a modelglyphs class. Such objects should all contain a data set with a gid variable and have the following attributes: model_info, key, x_major, y_major.
+#'
+#' @param x An object to be tested for membership in a modelglyphs class
+#'
+#' @export
+is.mg <- function(x) {
+	substr(class(x)[1], 1, 3) == "mg_"
+}
