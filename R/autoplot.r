@@ -21,7 +21,7 @@ autoplot.mg_ensemble <- function(object, ...) {
 
 #' Quickly plot the p-values of an ensemble of models
 #'
-#' significance_plot plots data derived from an mg_ensemble object. The x_major and y_major attributes of the mg_ensemble are used as the x and y axes of the plot. Each model in the ensemble is mapped to a point. The size of each point corresponds to the p-vale associated with that model (or its derivative data). An additional variable can also be mapped to the color of the point (optional).
+#' significance_plot plots data derived from an mg_ensemble object. The x_major and y_major attributes of the mg_ensemble are used as the x and y axes of the plot. Each model in the ensemble is mapped to a point. The size of each point corresponds to the p-value associated with that model (or its derivative data). An additional variable can also be mapped to the color of the point (optional).
 #'
 #' Significance_plots are meant to be quick and exploratory. 
 #'
@@ -59,4 +59,39 @@ significance_plot <- function(data, p.value, color = NULL, title = "", ...) {
 		breaks = c(0.01,0.05,0.1,0.25, 0.5,1)) +
 		opts(title = title)
 }
+	
+	
+#' Quickly plot the magnitudes of an ensemble of models
+#'
+#' mgnitude_plot plots data derived from an mg_ensemble object. The x_major and y_major attributes of the mg_ensemble are used as the x and y axes of the plot. Each model in the ensemble is mapped to a point. The size of each point corresponds to the magnitude of a quantity associated with that model (or its derivative data). An additional variable can also be mapped to the color of the point (optional).
+#'
+#' Magnitude plots are meant to be quick and exploratory. 
+#'
+#' @param data Any type of data object whose class is defined in the modelglyphs package. The class of the object will begin with "mg_".
+#' @param magnitude The name of the variable in data whoe magnitude will be plotted. The name should be written as a character vector.
+#' @param title Optional. The title of the graph as a character string.
+#' @export
+magnitude_plot <- function(data, magnitude, title = "", ...) {
+	require(ggplot2)
+	
+	if (substr(class(data)[1], 1, 3) != "mg_") {
+		stop("data is not a recognized modelglyphs class")
+	}
 		
+	data$.mag <- data[[magnitude]]
+	
+	data$.dir <- abs(data[[magnitude]])
+	max.value <- max(abs(range(data$.mag))) + 1e-3
+	values <- c(-max.value, 0, max.value)
+		
+	ggplot(data, aes(x, y)) +
+		geom_point(aes(color = .mag, size = .dir), ...) +
+		scale_colour_gradientn(magnitude, 
+			colours = RColorBrewer::brewer.pal(11, "RdYlBu")[11:1], 
+			values = values, rescaler = function(x, ...) x, 
+			oob = identity) + 
+		guides(color = guide_colorbar()) +
+		scale_area(paste("|", magnitude, "|")) +
+		opts(title = title)
+}
+	
