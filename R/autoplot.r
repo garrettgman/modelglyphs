@@ -8,6 +8,8 @@ autoplot.glyphplot <- function(object, ...) {
 # e2 <- ensemble(nasa, cross("long", "lat"), model(surftemp ~ temperature), "long", "lat")
 # e3 <- ensemble(nasa, cross("long", "lat"), model(surftemp ~ temperature, FUN = "gam"), "long", "lat")
 # e4 <- ensemble(nasa, cross("long", "lat"), model(surftemp ~ temperature, FUN = "loess"), "long", "lat")
+# e5 <- ensemble(test.data, cross("long", "lat"), model(Fertility ~ Agriculture, FUN = "gam"), "long", "lat")
+# e6 <- ensemble(test.data, cross("long", "lat"), model(Fertility ~ Agriculture, FUN = "loess"), "long", "lat")
 
 
 #' @S3method autoplot mg_ensemble
@@ -36,18 +38,20 @@ significance_plot <- function(data, p.value, color = NULL, title = "", ...) {
 	if (!is.mg(data)) {
 		stop("data is not a recognized modelglyphs class")
 	}
-		
+	
+	data$.x <- data[[x_major(data)]]
+	data$.y <- data[[y_major(data)]]	
 	data$.signif <- data[[p.value]]
 	
 	if (is.null(color)) {
-		p <- ggplot(data, aes(x, y)) +
+		p <- ggplot(data, aes(.x, .y)) +
 			geom_point(aes(size = .signif), ...)		
 	} else {
 		data$.color <- data[[color]]
 		max.value <- max(abs(range(data$.color))) + 1e-3
 		values <- c(-max.value, 0, max.value)
 		
-		p <- ggplot(data, aes(x, y)) +
+		p <- ggplot(data, aes(.x, .y)) +
 			geom_point(aes(color = .color, size = .signif), ...) +
 			scale_colour_gradientn(color, 
 				colours = RColorBrewer::brewer.pal(11, "RdYlBu")[11:1], 
@@ -57,7 +61,9 @@ significance_plot <- function(data, p.value, color = NULL, title = "", ...) {
 			
 	p +	scale_area(p.value, range = c(6, 1), 
 		breaks = c(0.01,0.05,0.1,0.25, 0.5,1)) +
-		opts(title = title)
+		opts(title = title) +
+		xlab(x_major(data)) +
+		ylab(y_major(data))
 }
 	
 	
@@ -77,14 +83,15 @@ magnitude_plot <- function(data, magnitude, title = "", ...) {
 	if (!is.mg(data)) {
 		stop("data is not a recognized modelglyphs class")
 	}
-		
+	data$.x <- data[[x_major(data)]]
+	data$.y <- data[[y_major(data)]]	
 	data$.mag <- data[[magnitude]]
 	
 	data$.dir <- abs(data[[magnitude]])
 	max.value <- max(abs(range(data$.mag))) + 1e-3
 	values <- c(-max.value, 0, max.value)
 		
-	ggplot(data, aes(x, y)) +
+	ggplot(data, aes(.x, .y)) +
 		geom_point(aes(color = .mag, size = .dir), ...) +
 		scale_colour_gradientn(magnitude, 
 			colours = RColorBrewer::brewer.pal(11, "RdYlBu")[11:1], 
@@ -92,7 +99,9 @@ magnitude_plot <- function(data, magnitude, title = "", ...) {
 			oob = identity) + 
 		guides(color = guide_colorbar()) +
 		scale_area(paste("|", magnitude, "|")) +
-		opts(title = title)
+		opts(title = title) + 
+		xlab(x_major(data)) +
+		ylab(y_major(data))
 }
 	
 # scatter_plot
@@ -115,14 +124,16 @@ scatter_plot <- function(data, x.minor, y.minor, title = "", ...) {
 		stop("data is not a recognized modelglyphs class")
 	}
 	
-	g.data <- glyphs(data, x.minor, y.minor)
+	g.data <- suppressMessages(glyphs(data, x.minor, y.minor))
 		
 	ggplot(g.data, aes(gx, gy, group = gid)) +
 		geom_point(...) +
-		opts(title = title)
+		opts(title = title) + 
+		xlab(x_major(data)) +
+		ylab(y_major(data))
 }
 
-# replace is.ensemble() with is.mg() in accessors?
+# replace x and y with x_major and y_major consistently
 
 # lines_plot
 
