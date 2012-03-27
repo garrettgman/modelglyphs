@@ -1,3 +1,10 @@
+# e1 <- ensemble(nasa, cross("long", "lat"))
+# m1 <- fit_models(e1, lm, formula = surftemp ~ month*year)
+# c1 <- coef(m1)
+# coef_plot(c1)
+# coef_plot(m1)
+
+
 #' Ensemble organizes a data set into an ensemble of sub-data sets.
 #'
 #' @param data a data frame to organize as an ensemble of sub data sets
