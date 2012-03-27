@@ -1,14 +1,14 @@
 \name{x_major}
 \alias{x_major}
 \alias{x_major<-}
-\title{Get/set the x_major attribute of an mg_ensemble object.}
+\title{Get/set the x_major attribute of a modelglyphs object.}
 \usage{
   x_major(x)
 }
 \arguments{
-  \item{x}{An object of class mg_ensemble}
+  \item{x}{An object with a mg.info attribute}
 }
 \description{
-  Get/set the x_major attribute of an mg_ensemble object.
+  Get/set the x_major attribute of a modelglyphs object.
 }
 

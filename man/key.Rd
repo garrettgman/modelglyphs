@@ -1,15 +1,15 @@
 \name{key}
-\alias{collate}
-\alias{collate<-}
 \alias{key}
-\title{Get/set the key attribute of an mg_ensemble object.}
+\alias{key<-}
+\alias{keye}
+\title{Get/set the key attribute of a modelglyphs object.}
 \usage{
   key(x)
 }
 \arguments{
-  \item{x}{An object of class mg_ensemble}
+  \item{x}{An object with a mg.info attribute}
 }
 \description{
-  Get/set the key attribute of an mg_ensemble object.
+  Get/set the key attribute of a modelglyphs object.
 }
 

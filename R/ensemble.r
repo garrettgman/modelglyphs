@@ -1,69 +1,51 @@
-#' Performs group-wise modelling on a data frame
+#' Ensemble organizes a data set into an ensemble of sub-data sets.
 #'
-#' ensemble splits the data frame into pieces based on the unique combinations 
-#' of the x_major and y_major variables. It then
-#' applies the specified model to each piece and saves the output as an ensemble
-#' object. Note, ensemble removes the x_major and Y_major variables from the dataframe for
-#' purposes of modelling. Each subset of the data will only have one unique 
-#' value of each variable, which makes them inappropriate to include in the 
-#' model.
-#' 
-#' @param data a data frame to apply group-wise modelling to
-#' @param groups a variable that provides a group identifier for doing group_wise modelling.
-#' @param model Information necessary to identify and apply a regression method. this information should be supplied as the output of a call to \code{\link{model}}.
-#' @param x_major a character string that specifies the variable to be on the major x axis when using the ensemble to make glyph plots. The data frame will be split into groups based on the unique combinations of x_major and y_major.
-#' @param y_major a character string that specifies the variable to be on the major y axis when using the ensemble to make glyph plots.
+#' @param data a data frame to organize as an ensemble of sub data sets
+#' @param grouping a mg_group object to use for splitting data into subsets
+#' @param x.major a character string that specifies the variable to be used on the x axis when plotting the ensembles. Defaults to the first grouping variable.
+#' @param y.major a character string that specifies the variable to be used on the y axis when plotting the ensembles. Defaults to the second grouping variable.
 #' 
 #' @return an S3 ensemble object. 
-#'
+
 #' @export
-ensemble <- function(data, groups, model, x_major = NULL, y_major = NULL) {
+ensemble <- function(data, grouping, x.major = NULL, y.major = NULL){
 	
+	if (!inherits(grouping, "mg_group")) 
+		stop("grouping must be an mg_group object")
+		
+	data$.gid <- grouping$FUN(data)
 	
-
-	half.empty <- structure(list(), 
-		data_set = data, 
-		groups = groups, 
-		x_major = x_major, 
-		y_major = y_major, 
-		model_info = model,
-		key = NULL,
-		collate = NULL,
-		class = c("mg_ensemble", "list"))
-	update(half.empty)
+	if (is.null(x.major)) x.major <- grouping$variables[1]
+	if (is.null(y.major)) y.major <- grouping$variables[2]
+	
+	key <- make_key(data, x.major, y.major)
+	
+	mg.info <- list(x.major = x.major,
+					y.major = y.major,
+					key = key)
+					
+	structure(data, mg.info = mg.info, class = c("mg_ensemble", "data.frame"))
 }
 
 
-#' @S3method format mg_ensemble
-format.mg_ensemble <- function(x, ...) {
-	cat(paste("ensemble of", length(x), "models:"), 
-		paste("\nmethod =", model_info(x)$FUN, "\nformula =", 
-		deparse(model_info(x)$formula)))
-}
-
-#' @S3method print mg_ensemble
-print.mg_ensemble <- function(x, ...) {
-	format(x)
-}
-
-#' Is x an ensemble object?
+#' Create a key to match group id's with x and y locations on a plot
 #'
-#' is.ensemble tests whether an object inherits from the mg_ensemble class.
-#'
-#' @param x An object to be tested for membership in the S3 mg_ensemble class
-#'
+#' make_key uses the x.major and y.major variables of an mg_ensemble 
+#' object to create a dataframe that shows where each group should be plotted 
+#' according to an x.major and y.major axis.
+#' 
+#' @param data A data frame with a .gid variable
+#' @param x.major The name of the x.major variable, as a character string
+#' @param y.major The name of the y.major variable, as a character string
+#' @keywords internal
 #' @export
-is.ensemble <- function(x) {
-	inherits(x, "mg_ensemble")
-}
-
-#' Is x a modelglyphs object?
-#'
-#' is.mg tests whether an object inherits from a modelglyphs class. Such objects should all contain a data set with a gid variable and have the following attributes: model_info, key, x_major, y_major.
-#'
-#' @param x An object to be tested for membership in a modelglyphs class
-#'
-#' @export
-is.mg <- function(x) {
-	substr(class(x)[1], 1, 3) == "mg_"
+make_key <- function(data, x.major, y.major) {
+	
+	get_majors <- function(df) {
+		c(x = df[[x.major]][1], y = df[[y.major]][1]) 
+	}
+	
+	key <- ddply(data, ".gid", get_majors) 
+	names(key)[2:3] <- c(x.major, y.major)
+	key
 }

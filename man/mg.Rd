@@ -1,25 +1,20 @@
 \name{mg}
 \alias{mg}
-\title{Coerce an object to a modelglyphs class}
+\title{Add the mg.info attribute of one object to another}
 \usage{
-  mg(x, ens, class, collate = FALSE)
+  mg(out, inp, class = NULL)
 }
 \arguments{
-  \item{x}{An object to be coerced to a modelglyphs class.}
+  \item{out}{An object to add an mg.info attribute to}
 
-  \item{ens}{An mg_ensemble object to borrow attributes
-  from.}
+  \item{inp}{An object with an mg.info attribute to copy to
+  out}
 
-  \item{class}{A chracter string. The name of the class to
-  give the new object.}
-
-  \item{collate}{logical. Should the output be arranged in
-  the order of the data the mg_ensemble was fitted to and
-  assigned the same row.names.}
+  \item{class}{A character string to add to the start of
+  the new object's class vector.}
 }
 \description{
-  mg coerces an object to the modelglyphs class specified
-  by the class argument.
+  Add the mg.info attribute of one object to another
 }
 \keyword{internal}
 
