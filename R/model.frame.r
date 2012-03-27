@@ -4,8 +4,10 @@ NULL
 
 #' S3method model.frame mg_ensemble
 model.frame.mg_ensemble <- function(formula, ...) {
-	output <- ldply(formula, model.frame, ...)
-	mg(output, formula, "mg_model.frame", collate = TRUE)
+	vars <- c(groups(e2)$variables, all.vars(model_info(e2)$formula))
+	data_set(formula)[vars]
+#	output <- ldply(formula, model.frame, ...)
+#	mg(output, formula, "mg_model.frame", collate = TRUE)
 }
 
 #' @S3method autoplot mg_resid
@@ -22,3 +24,7 @@ autoplot.mg_model.frame <- function(object, x.minor = NULL, y.minor = NULL, x.sc
 	line_plot(object, x.minor, y.minor, title = plot.title, x.scale, y.scale, ...)	
 }
 
+
+linear_model <- function(formula) {
+	model(formula, function = "lm", model = FALSE)
+}
