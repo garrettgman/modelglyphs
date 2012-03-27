@@ -23,3 +23,4 @@ Collate:
     'accessors.r'
     'coef_plot.r'
     'basic_plots.r'
+    'glyphs.r'
