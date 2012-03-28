@@ -1,5 +1,3 @@
-# fill_plot(e1, fill = max(temperature))
-
 #' Quickly create a tile plot for a function of the data
 #'
 #' fill_plot applies a fill function to each subset of data in an mg_ensemble object and then displays the results as fills in a tileplot. If the subsets are arranged evenly on the x, y grid, each tile will correspong to one subset in the ensemble.
@@ -45,7 +43,7 @@ fill_plot <- function(ens, fill, ...) {
 #' @param title Optional. The title of the graph as a character string.
 #' @export
 scatter_plot <- function(data, x.minor, y.minor, x.scale = identity, 
-	y.scale = identity, ...) {
+	y.scale = identity, size = 1/2, ...) {
 	require(ggplot2)
 	
 	g.data <- suppressMessages(glyphs(data, x.minor, y.minor, 
@@ -54,10 +52,41 @@ scatter_plot <- function(data, x.minor, y.minor, x.scale = identity,
 	plot.title <- paste("Ensemble of", x.minor, "vs.", y.minor)
 		
 	ggplot(g.data, aes(.x, .y, group = .gid)) +
-		geom_point(...) +
+		geom_point(size = size, ...) +
 		opts(title = plot.title) + 
 		xlab(x_major(data)) +
 		ylab(y_major(data))
 }
 
-
+# dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)))
+#' @export
+dot_plot <- function(ens, size, color, ...){
+	size.fun <- match.call()$size
+	get_sizes <- function(data) {
+		with(data, eval(size.fun))
+	}
+	
+	sizes <- ddply(ens, ".gid", get_sizes)
+	
+	color.fun <- match.call()$color
+	get_colors <- function(data) {
+		with(data, eval(color.fun))
+	}
+	colors <- ddply(ens, ".gid", get_colors)
+	
+	to.plot <- join(sizes, colors, by = ".gid")
+	names(to.plot) <- c(".gid", "V1", "V2")
+	
+	to.plot$.x <- key(ens)[, 2][to.plot$.gid]
+	to.plot$.y <- key(ens)[, 3][to.plot$.gid]
+	
+	plot.title <- paste("V1 =", deparse(size.fun), "\nV2 =", deparse(color.fun))
+	
+	ggplot(to.plot, aes(.x, .y)) +
+		geom_point(aes(size = V1, color = V2), ...) +
+		opts(title = plot.title) +
+		xlab(x_major(ens)) +
+		ylab(y_major(ens))
+}
+	
+	

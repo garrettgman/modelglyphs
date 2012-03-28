@@ -3,6 +3,8 @@
 # c1 <- coef(m1)
 # coef_plot(c1)
 # coef_plot(m1)
+# fill_plot(e1, fill = max(temperature))
+# scatter_plot(e1, "temperature", "cloudmid")
 
 
 #' Ensemble organizes a data set into an ensemble of sub-data sets.
