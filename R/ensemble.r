@@ -11,13 +11,14 @@
 #'
 #' @param data a data frame to organize as an ensemble of sub data sets
 #' @param grouping a mg_group object to use for splitting data into subsets
-#' @param x.major a character string that specifies the variable to be used on the x axis when plotting the ensembles. Defaults to the first grouping variable.
-#' @param y.major a character string that specifies the variable to be used on the y axis when plotting the ensembles. Defaults to the second grouping variable.
+#' @param x.major a character string that specifies the default variable to be used on the x axis when plotting the ensembles. Defaults to the first grouping variable.
+#' @param y.major a character string that specifies the default variable to be used on the y axis when plotting the ensembles. Defaults to the second grouping variable.
+#' @param a data.frame that specifes group specific information for each subset in the ensemble. The key must contain a .gid variable that lists group membership as well as the x.major and y.major variables specified for the group. It may also contain additional variables. If no key is provided, ensemble() will generate one that records the relationship between .gid, x.major, and y.major for each group.
 #' 
 #' @return an S3 ensemble object. 
 
 #' @export
-ensemble <- function(data, grouping, x.major = NULL, y.major = NULL){
+ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL){
 	
 	if (!inherits(grouping, "mg_group")) 
 		stop("grouping must be an mg_group object")
@@ -26,14 +27,9 @@ ensemble <- function(data, grouping, x.major = NULL, y.major = NULL){
 	
 	if (is.null(x.major)) x.major <- grouping$variables[1]
 	if (is.null(y.major)) y.major <- grouping$variables[2]
-	
-	key <- make_key(data, x.major, y.major)
-	
-	mg.info <- list(x.major = x.major,
-					y.major = y.major,
-					key = key)
+	if (is.null(key)) key <- make_key(data, x.major, y.major)
 					
-	structure(data, mg.info = mg.info, class = c("groups", "data.frame"))
+	structure(data, key = key, class = c("grouped", "data.frame"))
 }
 
 
@@ -67,17 +63,6 @@ make_key <- function(data, x.major, y.major) {
 #' @param x An object to be tested for membership in a modelglyphs class
 #'
 #' @export
-is.mg <- function(x) {
-	substr(class(x)[1], 1, 3) == "mg_"
-}
-
-#' Is x a modelglyphs object?
-#'
-#' is.mg tests whether an object inherits from a modelglyphs class. Such objects should all contain a data set with a gid variable and have the following attributes: model_info, key, x_major, y_major.
-#'
-#' @param x An object to be tested for membership in a modelglyphs class
-#'
-#' @export
 is.grouped <- function(x) {
-	inherits(x, "groups")
+	inherits(x, "grouped")
 }
