@@ -47,7 +47,7 @@ glyphs <- function(data, x.minor, y.minor, x.major = NULL, y.major = NULL, polar
       df
     })
   }
-  
+ 
   if (polar) {
     theta <- 2 * pi * rescale01(data[[x.minor]])
     r <- rescale01(data[[y.minor]])

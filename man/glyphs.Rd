@@ -2,17 +2,17 @@
 \alias{glyphs}
 \title{Create the data needed to generate a glyph plot.}
 \usage{
-  glyphs(data, x_minor, y_minor, x_major = NULL,
-    y_major = NULL, polar = FALSE, height = rel(0.95),
+  glyphs(data, x.minor, y.minor, x.major = NULL,
+    y.major = NULL, polar = FALSE, height = rel(0.95),
     width = rel(0.95), y_scale = identity,
     x_scale = identity, quiet = FALSE)
 }
 \arguments{
   \item{data}{A data frame containing variables named in
-  \code{x_minor}, \code{y_minor}, \code{x_major} and
-  \code{y_major}.}
+  \code{x.minor}, \code{y.minor}, \code{x.major} and
+  \code{y.major}.}
 
-  \item{x_minor,y_minor,x_major,y_major}{The name of the
+  \item{x.minor,y.minor,x.major,y.major}{The name of the
   variable (as a string) for the major and minor x and y
   axes.  Together, each unique}
 

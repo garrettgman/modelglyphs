@@ -21,3 +21,4 @@ Collate:
     'accessors.r'
     'basic_plots.r'
     'glyphs.r'
+    'gqplot.r'
