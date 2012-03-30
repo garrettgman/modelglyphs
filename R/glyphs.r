@@ -21,7 +21,7 @@ glyphs <- function(data, x_minor, y_minor, x_major = NULL, y_major = NULL, polar
     data$.gid <- interaction(data[[x_major]], data[[y_major]], drop = TRUE)
   }
   
-  if (is.mg(data) & is.null(x_major) & is.null(y_major)) {
+  if (is.grouped(data) & is.null(x_major) & is.null(y_major)) {
   	x_major <- x_major(data)
   	y_major <- y_major(data)
   } else if (is.null(x_major) | is.null(y_major)) {

@@ -6,26 +6,21 @@
 #' @param fill A function call to be applied to each subset in the data. This function should return only one value. This value will be mapped to fill. If more than one value is returned, only the first value will be used. Variables in ens should be referred to by name only. The call will be evaluated with \code{\link{with}} where each subset will be used as the enclosing data object.
 #' ... further arguments to be passed to geom_tile
 #' @export
-fill_plot <- function(ens, fill, ...) {
-	require(ggplot2)
-	fill.fun <- match.call()$fill
+fill_plot <- function(ens, ...) {
+	data <- groupwise(ens, ...)
 	
-	get_fills <- function(data) {
-		with(data, eval(fill.fun))
-	}
+	aesthetics <- quick.aes(match.call())
+	plot.title <- quick.title(match.call())
 	
-	fills <- ddply(ens, ".gid", get_fills)
-	fills$.x <- key(ens)[, 2][fills$.gid]
-	fills$.y <- key(ens)[, 3][fills$.gid]
+	data$.x <- key(ens)[ ,2][data$.gid]
+	data$.y <- key(ens)[ ,3][data$.gid]
 	
-	plot.title <- paste("V1 =", deparse(fill.fun))
-	
-	ggplot(fills, aes(.x, .y)) +
-		geom_tile(aes(fill = V1), ...) +
+	ggplot(data, aes(.x, .y)) +
+		geom_tile(mapping = aesthetics) +
 		opts(title = plot.title) +
 		xlab(x_major(ens)) +
 		ylab(y_major(ens))
-}
+}	
 
 
 
@@ -42,17 +37,19 @@ fill_plot <- function(ens, fill, ...) {
 #'  minor values within a grid cell.
 #' @param title Optional. The title of the graph as a character string.
 #' @export
-scatter_plot <- function(data, x.minor, y.minor, x.scale = identity, 
-	y.scale = identity, size = 1/2, ...) {
-	require(ggplot2)
-	
+scatter_plot <- function(ens, x.minor, y.minor, x.scale = identity, 
+	y.scale = identity, ...) {
+		browser()
+	data <- withgroups(ens, ...)
 	g.data <- suppressMessages(glyphs(data, x.minor, y.minor, 
 		x_scale = x.scale, y_scale = y.scale))
+	
+	aesthetics <- quick.aes(match.call())
 		
 	plot.title <- paste("Ensemble of", x.minor, "vs.", y.minor)
 		
 	ggplot(g.data, aes(.x, .y, group = .gid)) +
-		geom_point(size = size, ...) +
+		geom_point(mapping = aesthetics) +
 		opts(title = plot.title) + 
 		xlab(x_major(data)) +
 		ylab(y_major(data))
@@ -60,33 +57,39 @@ scatter_plot <- function(data, x.minor, y.minor, x.scale = identity,
 
 # dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)))
 #' @export
-dot_plot <- function(ens, size, color, ...){
-	size.fun <- match.call()$size
-	get_sizes <- function(data) {
-		with(data, eval(size.fun))
-	}
+dot_plot <- function(ens, ...){
+	data <- groupwise(ens, ...)
 	
-	sizes <- ddply(ens, ".gid", get_sizes)
+	aesthetics <- quick.aes(match.call())
+	plot.title <- quick.title(match.call())
 	
-	color.fun <- match.call()$color
-	get_colors <- function(data) {
-		with(data, eval(color.fun))
-	}
-	colors <- ddply(ens, ".gid", get_colors)
+	data$.x <- key(ens)[ ,2][data$.gid]
+	data$.y <- key(ens)[ ,3][data$.gid]
 	
-	to.plot <- join(sizes, colors, by = ".gid")
-	names(to.plot) <- c(".gid", "V1", "V2")
-	
-	to.plot$.x <- key(ens)[, 2][to.plot$.gid]
-	to.plot$.y <- key(ens)[, 3][to.plot$.gid]
-	
-	plot.title <- paste("V1 =", deparse(size.fun), "\nV2 =", deparse(color.fun))
-	
-	ggplot(to.plot, aes(.x, .y)) +
-		geom_point(aes(size = V1, color = V2), ...) +
+	ggplot(data, aes(.x, .y)) +
+		geom_point(mapping = aesthetics) +
 		opts(title = plot.title) +
 		xlab(x_major(ens)) +
 		ylab(y_major(ens))
 }
-	
+
+quick.title <- function(args) {
+	args <- as.list(args)
+	aesthetics <- c("color", "colour", "size", "shape", "alpha", "fill")
+	args <- args[names(args) %in% aesthetics]
+	lines <- paste(names(args), as.character(args), sep = " = ")
+	do.call("paste", c(as.list(lines), sep = "\n"))
+}
+
+
+quick.aes <- function(args) {
+	arg.names <- names(args)
+	aesthetics <- c("color", "colour", "size", "shape", "alpha", "fill")
+	aesthetics <- arg.names[arg.names %in% aesthetics]
+	nz.aesthetics <- aesthetics 
+	nz.aesthetics[aesthetics == "color"] <- "colour"
+	mappings <- aes()
+	mappings[nz.aesthetics] <- lapply(aesthetics, as.name)
+	mappings
+}
 	

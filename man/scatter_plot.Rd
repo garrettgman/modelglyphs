@@ -3,7 +3,7 @@
 \title{Quickly plot scatterplots of ensemble model data}
 \usage{
   scatter_plot(data, x.minor, y.minor, x.scale = identity,
-    y.scale = identity, ...)
+    y.scale = identity, size = 1/2, ...)
 }
 \arguments{
   \item{data}{Any type of data object whose class is
