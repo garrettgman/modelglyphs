@@ -29,7 +29,7 @@ ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL)
 	if (is.null(y.major)) y.major <- grouping$variables[2]
 	if (is.null(key)) key <- make_key(data, x.major, y.major)
 					
-	structure(data, key = key, class = c("grouped", "data.frame"))
+	structure(data, groups.key = key, class = c("grouped", "data.frame"))
 }
 
 
