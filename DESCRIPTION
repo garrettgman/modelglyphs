@@ -19,3 +19,5 @@ Collate:
     'groupings.r'
     'plyr-wrappers.r'
     'accessors.r'
+    'basic_plots.r'
+    'glyphs.r'
