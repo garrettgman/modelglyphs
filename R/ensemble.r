@@ -34,9 +34,18 @@ ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL)
 	
 	if (is.null(x.major)) x.major <- grouping$variables[1]
 	if (is.null(y.major)) y.major <- grouping$variables[2]
-	if (is.null(key)) key <- make_key(data, x.major, y.major)
+	if (is.null(key)) {
+		key <- make_key(data, x.major, y.major)
+	} else if (!(".gid" %in% names(key))) {
+		stop("key must contain a .gid column")	
+	} else if (!all(c(x.major, y.major) %in% names(key))) {
+		key1 <- make_key(data, x.major, y.major)
+		key <- join(key1, key[, setdiff(names(key), names(key1))], 
+			by = ".gid", type = "full")
+	}
 					
-	structure(data, groups.key = key, class = c("grouped", "data.frame"))
+	structure(data, group.info = list(defaults = c(x.major, y.major), key = key), 
+		class = c("grouped", "data.frame"))
 }
 
 

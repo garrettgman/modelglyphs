@@ -18,3 +18,4 @@ Collate:
     'ensemble.r'
     'groupings.r'
     'plyr-wrappers.r'
+    'accessors.r'
