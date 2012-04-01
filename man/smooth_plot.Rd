@@ -1,32 +1,28 @@
-\name{fill_plot}
-\alias{fill_plot}
-\title{Quickly create a tile plot for a function of the data}
+\name{smooth_plot}
+\alias{smooth_plot}
+\title{Quickly plot smoothed model summaries of grouped data}
 \usage{
-  fill_plot(ens, ..., x.major, y.major, facets = NULL,
-    polar = FALSE, height = rel(0.95), width = rel(0.95),
-    y_scale = identity, x_scale = identity, quiet = TRUE)
+  smooth_plot(ens, ..., x.minor, y.minor, x.major, y.major,
+    facets = NULL, polar = FALSE, height = rel(0.95),
+    width = rel(0.95), y_scale = identity,
+    x_scale = identity, quiet = TRUE, method, se)
 }
 \arguments{
-  \item{ens}{A mg_ensemble object}
-
-  \item{fill}{A function call to be applied to each subset
-  in the data. This function should return only one value.
-  This value will be mapped to fill. If more than one value
-  is returned, only the first value will be used. Variables
-  in ens should be referred to by name only. The call will
-  be evaluated with \code{\link{with}} where each subset
-  will be used as the enclosing data object. ... further
-  arguments to be passed to geom_tile}
-
   \item{ens}{A dataframe that inherits from class
   `grouped'}
 
+  \item{x.minor}{The variable to map to the local x axis
+  for each sub-plot.}
+
+  \item{y.minor}{The variable to map to the local y axis
+  for each sub-plot.}
+
   \item{x.major}{The variable to map to the global x axis.
-  If x.major is not specified, fill_plot will use the
+  If x.major is not specified, smooth_plot will use the
   x.major attribute of ens, see \code{\link{x_major}}.}
 
   \item{y.major}{The variable to map to the global y axis.
-  If x.major is not specified, fill_plot will use the
+  If x.major is not specified, smooth_plot will use the
   y.major attribute of ens, see \code{\link{y_major}}.}
 
   \item{facets}{Facetting formula to use. Picks
@@ -55,10 +51,7 @@
   y.minor. See \code{\link{glyphs}}.}
 }
 \description{
-  fill_plot applies a fill function to each subset of data
-  in an mg_ensemble object and then displays the results as
-  fills in a tileplot. If the subsets are arranged evenly
-  on the x, y grid, each tile will correspong to one subset
-  in the ensemble.
+  smooth_plot is a wrapper for \code{\link{ggplot}} and
+  \code{\link{geom_point}} form the ggplot2 package.
 }
 

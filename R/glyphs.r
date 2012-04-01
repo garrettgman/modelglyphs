@@ -63,7 +63,7 @@ glyphs <- function(data, x.minor, y.minor, x.major = NULL, y.major = NULL, polar
   structure(data, 
     width = width, height = height, polar = polar, 
     x.major = x.major, y.major = y.major,
-    class = c("glyphplot", "data.frame"))
+    class = c("glyphed", class(data)))
 }
 
 #' Create reference lines for a glyph plot
