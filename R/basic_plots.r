@@ -56,21 +56,21 @@ scatter_plot <- function(ens, x.minor, y.minor, x.scale = identity,
 
 # dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)))
 #' @export
-dot_plot <- function(ens, ...){
-	data <- gsummarise(ens, ...)
+#dot_plot <- function(ens, ...){
+#	data <- gsummarise(ens, ...)
 	
-	aesthetics <- quick.aes(match.call())
-	plot.title <- quick.title(match.call())
+#	aesthetics <- quick.aes(match.call())
+#	plot.title <- quick.title(match.call())
 	
-	data$.x <- key(ens)[ ,2][data$.gid]
-	data$.y <- key(ens)[ ,3][data$.gid]
+#	data$.x <- key(ens)[ ,2][data$.gid]
+#	data$.y <- key(ens)[ ,3][data$.gid]
 	
-	ggplot(data, aes(.x, .y)) +
-		geom_point(mapping = aesthetics) +
-		opts(title = plot.title) +
-		xlab(x_major(ens)) +
-		ylab(y_major(ens))
-}
+#	ggplot(data, aes(.x, .y)) +
+#		geom_point(mapping = aesthetics) +
+#		opts(title = plot.title) +
+#		xlab(x_major(ens)) +
+##		ylab(y_major(ens))
+#}
 
 quick.title <- function(args) {
 	args <- as.list(args)

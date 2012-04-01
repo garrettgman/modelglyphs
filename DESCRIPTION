@@ -22,3 +22,4 @@ Collate:
     'basic_plots.r'
     'glyphs.r'
     'gqplot.r'
+    'ggplot2-wrappers.r'
