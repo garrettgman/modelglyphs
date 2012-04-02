@@ -6,6 +6,11 @@
 # fill_plot(e1, fill = max(temperature))
 # scatter_plot(e1, x.minor = temperature, y.minor = cloudmid, size = I(1/2), x_scale = rescale11, y_scale = rescale11)
 # dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)))
+# dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)), x.major = mean(temperature), y.major = mean(surftemp))
+
+# gqplot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)), geom = "point")
+
+
 # dot_plot(e1, x.major = mean(temperature), y.major = max(abs(surftemp - temperature)))
 # line_plot(e1, x.minor = temperature, y.minor = cloudmid, size = I(1/2), x_scale = rescale11, y_scale = rescale11)
 # to do :line_plot(e1, x.minor = fivenum(temperature), y.minor = fivenum(surftemp), size = I(1/2), x_scale = rescale11, y_scale = rescale11)

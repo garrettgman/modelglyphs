@@ -17,10 +17,14 @@ gsummarise <- gsummarize <- function(ens, ..., .progress = "none",
 	if (missing(...)) {
 		return(ens)
 	} else if (is.data.frame(ens)) {
-		ddply(ens, ".gid", summarise, ..., .progress = .progress, .parallel = .parallel)
+		data <- ddply(ens, ".gid", summarise, ..., .progress = .progress, .parallel = .parallel)
 	} else {
-		dlply(ens, ".gid", summarise, ..., .progress = .progress, .parallel = .parallel)
+		data <- dlply(ens, ".gid", summarise, ..., .progress = .progress, .parallel = .parallel)
 	}	
+	
+	attr(data, "group.info") <- group_info(ens)
+	class(data) <- c("grouped", "data.frame")
+	data
 }
 
 
@@ -40,10 +44,14 @@ gtransform <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	if (missing(...)) {
 		return(ens)
 	} else if (is.data.frame(ens)) {
-		ddply(ens, ".gid", transform, ..., .progress = .progress, .parallel = .parallel)
+		data <- ddply(ens, ".gid", transform, ..., .progress = .progress, .parallel = .parallel)
 	} else {
-		dlply(ens, ".gid", transform, ..., .progress = .progress, .parallel = .parallel)
+		data <- dlply(ens, ".gid", transform, ..., .progress = .progress, .parallel = .parallel)
 	}	
+		
+	attr(data, "group.info") <- group_info(ens)
+	class(data) <- c("grouped", "data.frame")
+	data
 }
 
 #' Create groupwise mutations for an ensemble object
@@ -62,10 +70,14 @@ gmutate <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	if (missing(...)) {
 		return(ens)
 	} else if (is.data.frame(ens)) {
-		ddply(ens, ".gid", mutate, ..., .progress = .progress, .parallel = .parallel)
+		data <- ddply(ens, ".gid", mutate, ..., .progress = .progress, .parallel = .parallel)
 	} else {
-		dlply(ens, ".gid", mutate, ..., .progress = .progress, .parallel = .parallel)
+		data <- dlply(ens, ".gid", mutate, ..., .progress = .progress, .parallel = .parallel)
 	}	
+		
+	attr(data, "group.info") <- group_info(ens)
+	class(data) <- c("grouped", "data.frame")
+	data
 }
 
 
@@ -85,10 +97,14 @@ gsubset <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	if (missing(...)) {
 		return(ens)
 	} else if (is.data.frame(ens)) {
-		ddply(ens, ".gid", subset, ..., .progress = .progress, .parallel = .parallel)
+		data <- ddply(ens, ".gid", subset, ..., .progress = .progress, .parallel = .parallel)
 	} else {
-		dlply(ens, ".gid", subset, ..., .progress = .progress, .parallel = .parallel)
+		data <- dlply(ens, ".gid", subset, ..., .progress = .progress, .parallel = .parallel)
 	}	
+		
+	attr(data, "group.info") <- group_info(ens)
+	class(data) <- c("grouped", "data.frame")
+	data
 }
 
 #' Perform groupwise arranging for an ensemble object
@@ -107,8 +123,12 @@ garrange <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	if (missing(...)) {
 		return(ens)
 	} else if (is.data.frame(ens)) {
-		ddply(ens, ".gid", arrange, ..., .progress = .progress, .parallel = .parallel)
+		data <- ddply(ens, ".gid", arrange, ..., .progress = .progress, .parallel = .parallel)
 	} else {
-		dlply(ens, ".gid", arrange, ..., .progress = .progress, .parallel = .parallel)
+		data <- dlply(ens, ".gid", arrange, ..., .progress = .progress, .parallel = .parallel)
 	}	
+	
+	attr(data, "group.info") <- group_info(ens)
+	class(data) <- c("grouped", "data.frame")
+	data
 }
