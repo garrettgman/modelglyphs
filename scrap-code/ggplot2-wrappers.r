@@ -18,21 +18,19 @@
 #'  that no scaling is performed.  See \code{\link{glyphs}}. x_scale and y_scale are ignored if x.minor and y.minor aesthetics are not specified.
 #' @param quiet A logical that determines whether glyphing messages are suppressed when transforming x.minor and y.minor. See \code{\link{glyphs}}. x_scale and y_scale are ignored if x.minor and y.minor aesthetics are not specified.
 #' @export
-dot_plot <- function(ens, ..., x.major = NULL, y.major = NULL, facets = NULL, polar = FALSE, height = rel(0.95), width = rel(0.95), y_scale = identity, x_scale = identity, quiet = TRUE) {
+dot_plot <- function(ens, ..., x.major, y.major, facets = NULL, polar = FALSE, height = rel(0.95), width = rel(0.95), y_scale = identity, x_scale = identity, quiet = TRUE) {
 	
 	if (missing(ens)) stop("dot_plot needs missing argument: ens")
 	if (!is.grouped(ens)) stop("ens must be of class 'grouped'")
 	
 	args <- as.list(match.call()[-1])
-	args <- args[setdiff(names(args), c("x.major", "y.major"))]
-	
+	# args <- match.call(expand.dots = FALSE)$`...`
 	env <- parent.frame()
 	
-	data <- fix_major_axes(ens, x.major, y.major)
-	data <- quick_glyph(data, args, polar, height, width, y_scale, 
+	data <- quick_glyph(ens, args, polar, height, width, y_scale, 
 		x_scale, quiet)
 	data <- quick_summaries(data, args)
-	aesthetics <- quick_aes(args)
+	aesthetics <- quick_aes(args) # aes_all
 	parameters <- quick_params(args)
 	plot.title <- quick_title(args)
 	
@@ -329,28 +327,6 @@ smooth_plot <- function(ens, ..., x.minor, y.minor, x.major, y.major, facets = N
 }
 
 
-fix_major_axes <- function(data, x.major, y.major) {
-
-	x.major <- substitute(x.major, env = parent.frame()) 
-	y.major <- substitute(y.major, env = parent.frame())
-	
-	if(is.null(x.major)) {
-		data$x.major <- data[[x_major(data)]]
-	}
-	
-	if(is.null(y.major)) {
-		data$y.major <- data[[y_major(data)]]
-	}
-	
-	if (!(is.null(x.major) & is.null(y.major))) {
-		mutates <- list(ens = data, x.major = x.major, y.major = y.major)
-		nulls <- vapply(mutates, "is.null", c(TRUE))
-		mutates <- mutates[!nulls]
-		do.call("gmutate", mutates)
-	} else {
-		data
-	}
-}	
 	
 	
 quick_glyph <- function(ens, args, polar, height, width, y_scale, 
@@ -363,15 +339,27 @@ quick_glyph <- function(ens, args, polar, height, width, y_scale,
 		stop(paste("missing argument:", c("x.minor", "y.minor")[xy]))
 	}
 	
+	if (is.null(args$x.major)) {
+		xmajor <- x_major(ens)
+	} else {
+		xmajor <- as.character(args$x.major)
+	}
+		
+	if (is.null(args$y.major)) {
+		ymajor <- y_major(ens)
+	} else {
+		ymajor <- as.character(args$y.major)
+	}
+	
 	if (n.xy == 0) {
-		names(ens)[names(ens) == "x.major"] <- ".x"
-		names(ens)[names(ens) == "y.major"] <- ".y"
+		names(ens)[names(ens) == xmajor] <- ".x"
+		names(ens)[names(ens) == ymajor] <- ".y"
 		ens
 	} else {
-		xminor <- deparse(args$x.minor)
-    	yminor <- deparse(args$y.minor)
+		xminor <- as.character(args$x.minor)
+    	yminor <- as.character(args$y.minor)
     	
-    	glyphs(ens, xminor, yminor, "x.major", "y.major", polar, 
+    	glyphs(ens, xminor, yminor, xmajor, ymajor, polar, 
     		height, width, y_scale, x_scale, quiet)
 	} 
 }

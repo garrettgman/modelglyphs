@@ -5,20 +5,18 @@ gqplot <- function(ens, ..., x.major = NULL, y.major = NULL, x.minor = NULL, y.m
 	if (!is.grouped(ens)) stop("ens must be of class 'grouped'")
 	
 	args <- as.list(match.call()[-1])
-	aggs <- args[setdiff(names(args), c("ens", "geom", "x.major", "y.major", 
-		"x.minor", "y.minor", "polar", "height", "width", "x_scale", "y_scale", 
-		"quiet"))]
+	vars <- match.call(expand.dots = FALSE)$... 
 	env <- parent.frame()
 	
 	data <- resolve_axes(ens, x.minor, y.minor, x.major, y.major, 
 		polar, height, width, y_scale, x_scale, quiet)		
+		
+	data <- resolve_variables(data, vars, env)
 
-	data <- resolve_variables(data, aggs)
-
-	aesthetics <- quick_aes(aggs)
-	parameters <- quick_params(aggs)
+	aesthetics <- quick_aes(names(vars))
+	parameters <- quick_params(vars)
 	labels <- quick_labels(args, x_major(ens), y_major(ens))
-	
+		
 	p <- ggplot(data, aesthetics, environment = env)
 	geom.layer <- do.call(paste("geom", geom, sep = "_"), parameters)
 	p <- p + geom.layer
@@ -28,7 +26,7 @@ gqplot <- function(ens, ..., x.major = NULL, y.major = NULL, x.minor = NULL, y.m
 			p + facet_grid(facets), 
 			p + facet_wrap(facets))
 	}
-	
+
 	p + opts(title = labels$main) +
 		xlab(labels$x) +
 		ylab(labels$y)
@@ -36,13 +34,13 @@ gqplot <- function(ens, ..., x.major = NULL, y.major = NULL, x.minor = NULL, y.m
 
 
 resolve_axes <- function(data, x.minor, y.minor, x.major, y.major, polar, height, width, y_scale, x_scale, quiet) {
-	
+
 	x.minor <- substitute(x.minor, env = parent.frame()) 
 	y.minor <- substitute(y.minor, env = parent.frame())
 	x.major <- substitute(x.major, env = parent.frame()) 
 	y.major <- substitute(y.major, env = parent.frame())
 	
-	n.xy <- !is.null(x.minor) + !is.null(y.minor)
+	n.xy <- sum(c(!is.null(x.minor), !is.null(y.minor)))
 	if (n.xy == 1) stop(paste("missing argument:", c("x.minor", "y.minor")[xy]))
 
 	
@@ -91,44 +89,37 @@ resolve_axes <- function(data, x.minor, y.minor, x.major, y.major, polar, height
 }
 
 
-resolve_variables <- function(data, aggs) {
-	
-	summaries <- compact(aggs[.all_aes])
-    summaries <- summaries[!is.constant(summaries)]
-	summaries$ens <- quote(data)
-	
-	# exclude excess data
-	vars <- unique(unlist(lapply(aggs, "all.vars")))
-	vars <- c(vars, ".x", ".y", ".gid")
-	data <- data[, names(data) %in% vars]
-
-	# attempt summarise
-	summaries$.x = quote(.x)
-	summaries$.y = quote(.y)
-	gdata <- try(do.call("gsummarise", summaries), silent = TRUE)
-	
-	# attempt transform if necessary
-	if (inherits(gdata, "try-error")) {
-		summaries$.x = quote(.x)
-		summaries$.y = quote(.y)
-		gdata <- do.call("gmutate", summaries)
+resolve_variables <- function(data, vars, env) {
+	summaries <- compact(vars[.all_aes])
+	summaries <- summaries[!is.constant(summaries)]
+	if (length(summaries) == 0) {
+		return(data)
 	}
 	
-	gdata
+	single <- subset(data, .gid == .gid[[1]])
+	single_result <- lapply(summaries, eval, envir = single, 
+		enclos = env)
+	
+	lengths <- vapply(single_result, length, integer(1))
+	if (all(lengths == 1)) {
+		fun <- "gsummarise"
+		vars <- .(.x = .x[[1]], .y = .y[[1]])
+	} else {
+		fun <- "gtransform"
+		vars <- NULL
+	}
+		
+	summary_call <- as.call(c(list(as.name(fun), ens = quote(data)), 
+		summaries, vars))
+	eval(summary_call)
 }
 
 
-quick_aes <- function(args) {
-	args <- args[!is.constant(args)]
-	arg.names <- names(args)
-	aesthetics <- arg.names[arg.names %in% .all_aes]
-	nz.aesthetics <- aesthetics 
-	nz.aesthetics[aesthetics == "color"] <- "colour"
-	mappings <- aes()
-	mappings[nz.aesthetics] <- lapply(aesthetics, as.name)
-	mappings$x <- quote(.x)
-	mappings$y <- quote(.y)
-	mappings
+quick_aes <- function(names.vars) {
+	maps <- aes_all(names.vars)
+	maps$x <- quote(.x)
+	maps$y <- quote(.y)
+	maps
 }
 
 
@@ -143,27 +134,27 @@ quick_params <- function(args) {
 }
 
 quick_labels <- function(args, x.major, y.major) {
-	
+
 	# plot title
 	args <- as.list(args)
 	aesthetics <- c("x.minor", "y.minor", .all_aes[.all_aes != "facets"])
-	args <- args[names(args) %in% aesthetics]
-	args <- args[!is.constant(args)]
-	lines <- paste(names(args), as.character(args), sep = " = ")
+	aess <- args[names(args) %in% aesthetics]
+	aess <- aess[!is.constant(aess)]
+	lines <- paste(names(aess), as.character(aess), sep = " = ")
 	main <- do.call("paste", c(as.list(lines), sep = "\n"))
 	
 	# x label
 	if (is.null(args$x.major)) {
 		x.lab <- x.major
 	} else {
-		x.lab <- deparse(substitute(args$x.major))
+		x.lab <- deparse(substitute(args)$x.major)
 	}
 	
 	# y label
 	if (is.null(args$y.major)) {
 		y.lab <- y.major
 	} else {
-		y.lab <- deparse(substitute(args$y.major))
+		y.lab <- deparse(substitute(args)$y.major)
 	}
 	
 	list(main = main, x = x.lab, y = y.lab)

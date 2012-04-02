@@ -4,11 +4,16 @@
 # m1 <- gmutate(e1, cloud.rng = cloudhigh - cloudlow, norm.rng = cloud.rng / cloudmid)
 # s2 <- gsubset(e1, temperature == max(temperature))
 # fill_plot(e1, fill = max(temperature))
+# gqplot(e1, fill = max(temperature), geom = "tile")
 # scatter_plot(e1, x.minor = temperature, y.minor = cloudmid, size = I(1/2), x_scale = rescale11, y_scale = rescale11)
+# gqplot(e1, x.minor = temperature, y.minor = cloudmid, size = I(1/2), x_scale = rescale11, y_scale = rescale11)
 # dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)))
+# gqplot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)))
 # dot_plot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)), x.major = mean(temperature), y.major = mean(surftemp))
+# gqplot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)), x.major = mean(temperature), y.major = mean(surftemp))
 
-# gqplot(e1, size = max(abs(surftemp - temperature)), color = max(surftemp - temperature) == max(abs(surftemp - temperature)), geom = "point")
+
+# gqplot(e1, size = max(abs(surftemp - temperature)), color = mean(surftemp) - mean(temperature), geom = "point")
 
 
 # dot_plot(e1, x.major = mean(temperature), y.major = max(abs(surftemp - temperature)))

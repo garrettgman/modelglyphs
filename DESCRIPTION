@@ -20,4 +20,4 @@ Collate:
     'plyr-wrappers.r'
     'accessors.r'
     'glyphs.r'
-    'gqplot.R'
+    'ggplot2-wrappers.r'

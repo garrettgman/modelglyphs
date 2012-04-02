@@ -10,7 +10,7 @@
 #' @export gsummarise gsummarize
 gsummarise <- gsummarize <- function(ens, ..., .progress = "none", 
 	.parallel = FALSE) {	
-		
+
 	if (!is.grouped(ens))
 		stop("ens must be an ensemble object")
 	
