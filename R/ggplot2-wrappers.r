@@ -8,6 +8,9 @@ gqplot <- function(ens, ..., x.major = NULL, y.major = NULL, x.minor = NULL, y.m
 	vars <- match.call(expand.dots = FALSE)$... 
 	env <- parent.frame()
 	
+	cols <- unique(unlist(lapply(args, "all.vars")))	
+	data <- ens[, names(ens) %in% c(cols, ".gid", ".x", ".y")]
+	
 	data <- resolve_axes(ens, x.minor, y.minor, x.major, y.major, 
 		polar, height, width, y_scale, x_scale, quiet)		
 		
