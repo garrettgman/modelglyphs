@@ -111,7 +111,16 @@ resolve_axes <- function(data, x.minor, y.minor, x.major, y.major, polar, height
 resolve_variables <- function(data, vars, env) {
 	summaries <- compact(vars[.all_aes])
 	summaries <- summaries[!is.constant(summaries)]
+	
 	if (length(summaries) == 0) {
+		return(data)
+	}
+	
+	summs <- lapply(summaries, "deparse")
+	if (all(summs %in% names(data))) {
+		new.names <- structure(names(data), names = names(data)) 
+		new.names[unlist(summs)] <- names(summaries)
+		names(data) <- new.names 
 		return(data)
 	}
 	
