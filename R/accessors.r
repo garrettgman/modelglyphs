@@ -61,10 +61,41 @@ key <- function(x) {
 #' @param x An object with a group.info attribute
 #' @export enviro "enviro<-"
 enviro <- function(x) {
-	group_info(x)$environment
+	as.name(group_info(x)$environment)
 }
 
 "enviro<-" <- function(x, value) {
 	group_info(x)$environment <- value
 	x
+}
+
+#' Get/set the n.mod variable of a modelglyphs object.
+#'
+#' @aliases n_mod n_mod<-
+#' @param x An object with a group.info attribute
+#' @export enviro "enviro<-"
+n_mod <- function(x) {
+	env <- enviro(x)
+	eval(bquote(.(env)$n.mod), envir = globalenv())
+}
+
+"n_mod<-" <- function(x, value) {
+	assignInGroupspace("n.mod", value, x)
+	x
+}
+
+#' Assign a variable in the environment associated with a grouped data object
+#'
+#' @keywords internal
+#' @param x A character string. The name of the variable to be assigned
+#' @param value The value to be assigned to x
+#' @param ens The object of class 'grouped'. x will be assigned in the environment specified by the environment slot of ens's group.info attribute
+#'
+#' @export
+assignInGroupspace <- function(x, value, ens) {
+	if (!is.grouped(ens))
+		stop("assignInGroupspace requires ens to be of class 'grouped'")
+	env <- enviro(ens)
+	expr <- bquote(.(env)[[.(x)]] <- .(value))
+	eval(expr, envir = globalenv())
 }

@@ -6,7 +6,7 @@
   y_major(x)
 }
 \arguments{
-  \item{x}{An object with a mg.info attribute}
+  \item{x}{An object with a group.info attribute}
 }
 \description{
   Get/set the y_major attribute of a modelglyphs object.

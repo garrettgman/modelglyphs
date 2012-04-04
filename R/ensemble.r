@@ -1,4 +1,5 @@
 # e1 <- ensemble(nasa, cross("long", "lat"))
+# m1 <- gmodel(e1, "lm", surftemp ~ temperature)
 # s1 <- gsummarise(e1, max.temp = max(temperature))
 # t1 <- gtransform(e1, max.temp = max(temperature), op = ozone / pressure)
 # m1 <- gmutate(e1, cloud.rng = cloudhigh - cloudlow, norm.rng = cloud.rng / cloudmid)
@@ -65,9 +66,8 @@ ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL)
 	ens <- structure(data, group.info = list(defaults = c(x.major, y.major), 
 		key = key, environment = env.data), class = c("grouped", "data.frame"))
 	
-	env <- as.name(env.data)
-	env_call <- bquote(.(env)$data <- .(ens))
-	eval(env_call, envir = globalenv())
+	assignInGroupspace("data", ens, ens)
+	assignInGroupspace("n.mod", 0, ens)
 	
 	ens
 }
