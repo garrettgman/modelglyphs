@@ -14,7 +14,7 @@ group_info <- function(x) {
 
 #' Get/set the x_major attribute of a modelglyphs object.
 #' @aliases x_major x_major<-
-#' @param x An object with a mg.info attribute
+#' @param x An object with a group.info attribute
 #' @export x_major "x_major<-"
 x_major <- function(x) {
 	group_info(x)$defaults[1]
@@ -29,7 +29,7 @@ x_major <- function(x) {
 #' Get/set the y_major attribute of a modelglyphs object.
 #'
 #' @aliases y_major y_major<-
-#' @param x An object with a mg.info attribute
+#' @param x An object with a group.info attribute
 #' @export y_major "y_major<-"
 y_major <- function(x) {
 	group_info(x)$defaults[2]
@@ -42,8 +42,8 @@ y_major <- function(x) {
 
 #' Get/set the key attribute of a modelglyphs object.
 #'
-#' @aliases keye key<-
-#' @param x An object with a mg.info attribute
+#' @aliases key key<-
+#' @param x An object with a group.info attribute
 #' @export key "key<-"
 key <- function(x) {
 	group_info(x)$key
@@ -51,5 +51,20 @@ key <- function(x) {
 
 "key<-" <- function(x, value) {
 	group_info(x)$key <- value
+	x
+}
+
+
+#' Get/set the environment attribute of a modelglyphs object.
+#'
+#' @aliases enviro enviro<-
+#' @param x An object with a group.info attribute
+#' @export enviro "enviro<-"
+enviro <- function(x) {
+	group_info(x)$environment
+}
+
+"enviro<-" <- function(x, value) {
+	group_info(x)$environment <- value
 	x
 }
