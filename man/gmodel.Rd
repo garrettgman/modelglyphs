@@ -7,7 +7,8 @@
 \arguments{
   \item{data}{A data frame of class 'grouped'}
 
-  \item{.fun}{A modelling function to use}
+  \item{.fun}{A character string. The name of the modelling
+  function to use}
 
   \item{formula,}{the modelling formula to use}
 
