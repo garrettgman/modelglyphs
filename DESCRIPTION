@@ -21,3 +21,4 @@ Collate:
     'accessors.r'
     'glyphs.r'
     'ggplot2-wrappers.r'
+    'gmodel.r'

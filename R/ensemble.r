@@ -1,4 +1,5 @@
 # e1 <- ensemble(nasa, cross("long", "lat"))
+# m1 <- gmodel(e1, "lm", surftemp ~ temperature)
 # s1 <- gsummarise(e1, max.temp = max(temperature))
 # t1 <- gtransform(e1, max.temp = max(temperature), op = ozone / pressure)
 # m1 <- gmutate(e1, cloud.rng = cloudhigh - cloudlow, norm.rng = cloud.rng / cloudmid)
@@ -42,6 +43,9 @@
 #' @export
 ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL){
 	
+	env.data <- paste(".env.", as.character(substitute(data)), sep = "")
+	assign(env.data, new.env(), pos = globalenv())
+	
 	if (!inherits(grouping, "mg_group")) 
 		stop("grouping must be an mg_group object")
 		
@@ -58,9 +62,14 @@ ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL)
 		key <- join(key1, key[, setdiff(names(key), names(key1))], 
 			by = ".gid", type = "full")
 	}
-					
-	structure(data, group.info = list(defaults = c(x.major, y.major), key = key), 
-		class = c("grouped", "data.frame"))
+	
+	ens <- structure(data, group.info = list(defaults = c(x.major, y.major), 
+		key = key, environment = env.data), class = c("grouped", "data.frame"))
+	
+	assignInGroupspace("data", ens, ens)
+	assignInGroupspace("n.mod", 0, ens)
+	
+	ens
 }
 
 

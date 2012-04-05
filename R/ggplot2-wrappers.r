@@ -1,15 +1,15 @@
 #' Plot grouped data
 #' gplot is a wrapper for \code{\link{ggplot}} that preprocesses grouped data before plotting. gplot allows the user to specify both minor and major x, y axiis and uses \code{\link{glyphs}} to resolve the resulting position aesthetics. It also applies all mappings in a groupwise fashion. Unlike ggplot, gplot can only plot one aesthetic at a time. However, gplot returns a ggplot object which can be combined with additional layers and ggplot2 objects in the usual fashion.
 #'
-#' @params ens A data frame of class 'grouped'
-#' @params ... aesthetics and parameters to be passed on to the \code{\link{ggplot}} call
-#' @params x.major variable or function of a variable to be used for the major x axis
-#' @params y.major variable or function of a variable to be used for the major y axis
-#' @params x.minor variable or function of a variable to be used for the minor x axis
-#' @params y.minor variable or function of a variable to be used for the minor y axis
-#' @params geom character vector specifying geom to use.
-#' @params facets faceting formula to use. Picks \code{\link{facet_wrap}} or \code{\link{facet_grid}} depending on whether the formula is one sided or two-sided
-#' @params polar,height,width,y_scale,x_scale,quiet arguments to be passedo n to glyphs when resolving x and y position aesthetics.
+#' @param ens A data frame of class 'grouped'
+#' @param ... aesthetics and parameters to be passed on to the \code{\link{ggplot}} call
+#' @param x.major variable or function of a variable to be used for the major x axis
+#' @param y.major variable or function of a variable to be used for the major y axis
+#' @param x.minor variable or function of a variable to be used for the minor x axis
+#' @param y.minor variable or function of a variable to be used for the minor y axis
+#' @param geom character vector specifying geom to use.
+#' @param facets faceting formula to use. Picks \code{\link{facet_wrap}} or \code{\link{facet_grid}} depending on whether the formula is one sided or two-sided
+#' @param polar,height,width,y_scale,x_scale,quiet arguments to be passedo n to glyphs when resolving x and y position aesthetics.
 #'
 #'
 #' @export
