@@ -73,7 +73,7 @@ enviro <- function(x) {
 #'
 #' @aliases n_mod n_mod<-
 #' @param x An object with a group.info attribute
-#' @export enviro "enviro<-"
+#' @export n_mod "n_mod<-"
 n_mod <- function(x) {
 	env <- enviro(x)
 	eval(bquote(.(env)$n.mod), envir = globalenv())
@@ -98,4 +98,56 @@ assignInGroupspace <- function(x, value, ens) {
 	env <- enviro(ens)
 	expr <- bquote(.(env)[[.(x)]] <- .(value))
 	eval(expr, envir = globalenv())
+}
+
+#' Get/set the model.info attribute of a modelglyphs object.
+#' @aliases model_info model_info<-
+#' @param x An object with a model.info attribute
+#' @export model_info "model_info<-"
+model_info <- function(x) {
+	attr(x, "model.info")
+}
+
+"model_info<-" <- function(x, value) {
+	attr(x, "model.info") <- value
+	x
+}
+
+#' Get/set the model type attribute of a modelglyphs object.
+#' @aliases m_type m_type<-
+#' @param x An object with a model.info attribute
+#' @export m_type "m_type<-"
+m_type <- function(x) {
+	model_info(x)$type
+}
+
+"m_type<-" <- function(x, value) {
+	model_info(x)$type <- value
+	x
+}
+
+#' Get/set the model formula attribute of a modelglyphs object.
+#' @aliases m_formula m_formula<-
+#' @param x An object with a model.info attribute
+#' @export m_formula "m_formula<-"
+m_formula <- function(x) {
+	model_info(x)$formula
+}
+
+"m_formula<-" <- function(x, value) {
+	model_info(x)$formula <- value
+	x
+}
+
+#' Get/set the model time attribute of a modelglyphs object.
+#' @aliases m_time m_time<-
+#' @param x An object with a model.info attribute
+#' @export m_time "m_time<-"
+m_time <- function(x) {
+	model_info(x)$time
+}
+
+"m_time<-" <- function(x, value) {
+	model_info(x)$time <- value
+	x
 }

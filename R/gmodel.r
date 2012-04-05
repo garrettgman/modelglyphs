@@ -9,15 +9,18 @@
 #'
 #' @export 
 gmodel <- function(data, .fun, formula, ...) {
-	
-    	.fun <- get(.fun)
-    	models <- dlply(data, ".gid", .fun, formula = formula, ...)
+		lm <- function(...) stats::lm(model = FALSE, ...)
+    	.Fun <- get(.fun)
+    	models <- dlply(data, ".gid", .Fun, formula = formula, ...)
     	
 		g.info <- group_info(data)
 		m.type <- .fun
 		m.formula <- formula
 		m.time <- Sys.time()
-		
+		m.call <- as.call(list(as.name(.fun), formula = formula, 
+			data = substitute(data)))
+			
+		models <- lapply(models, function(x) {x$call <- m.call; x})	
 		mg_class <- c("grouped", "models", class(models[[1]]))
 		
 		mg <- structure(models, group.info = g.info, 
