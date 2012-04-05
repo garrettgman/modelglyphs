@@ -16,11 +16,10 @@ gsummarise <- gsummarize <- function(ens, ..., .progress = "none",
 	
 	if (missing(...)) {
 		return(ens)
-	} else if (is.data.frame(ens)) {
-		data <- ddply(ens, ".gid", summarise, ..., .progress = .progress, .parallel = .parallel)
-	} else {
-		data <- dlply(ens, ".gid", summarise, ..., .progress = .progress, .parallel = .parallel)
-	}	
+	}
+		
+	data <- ddply(ens, ".gid", summarise, ..., .progress = .progress, 
+		.parallel = .parallel)
 	
 	attr(data, "group.info") <- group_info(ens)
 	class(data) <- c("grouped", "data.frame")
@@ -43,11 +42,10 @@ gtransform <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	
 	if (missing(...)) {
 		return(ens)
-	} else if (is.data.frame(ens)) {
-		data <- ddply(ens, ".gid", transform, ..., .progress = .progress, .parallel = .parallel)
-	} else {
-		data <- dlply(ens, ".gid", transform, ..., .progress = .progress, .parallel = .parallel)
-	}	
+	} 
+	
+	data <- ddply(ens, ".gid", transform, ..., .progress = .progress, 
+		.parallel = .parallel)	
 		
 	attr(data, "group.info") <- group_info(ens)
 	class(data) <- c("grouped", "data.frame")
@@ -69,11 +67,10 @@ gmutate <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	
 	if (missing(...)) {
 		return(ens)
-	} else if (is.data.frame(ens)) {
-		data <- ddply(ens, ".gid", mutate, ..., .progress = .progress, .parallel = .parallel)
-	} else {
-		data <- dlply(ens, ".gid", mutate, ..., .progress = .progress, .parallel = .parallel)
-	}	
+	} 
+	
+	data <- ddply(ens, ".gid", mutate, ..., .progress = .progress, 
+		.parallel = .parallel)	
 		
 	attr(data, "group.info") <- group_info(ens)
 	class(data) <- c("grouped", "data.frame")
@@ -96,11 +93,10 @@ gsubset <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	
 	if (missing(...)) {
 		return(ens)
-	} else if (is.data.frame(ens)) {
-		data <- ddply(ens, ".gid", subset, ..., .progress = .progress, .parallel = .parallel)
-	} else {
-		data <- dlply(ens, ".gid", subset, ..., .progress = .progress, .parallel = .parallel)
-	}	
+	} 
+	
+	data <- ddply(ens, ".gid", subset, ..., .progress = .progress, 
+		.parallel = .parallel)	
 		
 	attr(data, "group.info") <- group_info(ens)
 	class(data) <- c("grouped", "data.frame")
@@ -122,11 +118,10 @@ garrange <- function(ens, ..., .progress = "none", .parallel = FALSE) {
 	
 	if (missing(...)) {
 		return(ens)
-	} else if (is.data.frame(ens)) {
-		data <- ddply(ens, ".gid", arrange, ..., .progress = .progress, .parallel = .parallel)
-	} else {
-		data <- dlply(ens, ".gid", arrange, ..., .progress = .progress, .parallel = .parallel)
-	}	
+	} 
+	
+	data <- ddply(ens, ".gid", arrange, ..., .progress = .progress, 
+		.parallel = .parallel)
 	
 	attr(data, "group.info") <- group_info(ens)
 	class(data) <- c("grouped", "data.frame")
