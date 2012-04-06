@@ -23,3 +23,5 @@ Collate:
     'ggplot2-wrappers.r'
     'gmodel.r'
     'models-class.r'
+    'models-functions.r'
+    'util.r'
