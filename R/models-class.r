@@ -15,3 +15,8 @@ format.models <- function(x, ...){
 print.models <- function(x, ...){
 	format(x)
 }
+
+str.models <- function(object, ...){
+	cat(paste("A list of", length(object), "models\nEach has the following structure (from first element):\n"))
+	str(object[[1]])
+}
