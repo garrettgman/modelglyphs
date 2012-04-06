@@ -84,6 +84,32 @@ n_mod <- function(x) {
 	x
 }
 
+
+#' Get/set the collater variable of a modelglyphs object.
+#'
+#' @aliases collater collater<-
+#' @param x An object with a group.info attribute
+#' @export collater "collater<-"
+collater <- function(x) {
+	env <- enviro(x)
+	eval(bquote(.(env)$collater), envir = globalenv())
+}
+
+"collater<-" <- function(x, value) {
+	assignInGroupspace("collater", value, x)
+	x
+}
+
+#' Get the data set that a modelglyphs object was originally constructed from.
+#'
+#' @param x An object with a group.info attribute
+#' @export
+orig_data <- function(x) {
+	env <- enviro(x)
+	eval(bquote(.(env)$data), envir = globalenv())
+}
+
+
 #' Assign a variable in the environment associated with a grouped data object
 #'
 #' @keywords internal
@@ -151,3 +177,4 @@ m_time <- function(x) {
 	model_info(x)$time <- value
 	x
 }
+

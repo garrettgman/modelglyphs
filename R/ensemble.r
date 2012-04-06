@@ -68,6 +68,7 @@ ensemble <- function(data, grouping, x.major = NULL, y.major = NULL, key = NULL)
 	
 	assignInGroupspace("data", ens, ens)
 	assignInGroupspace("n.mod", 0, ens)
+	assignInGroupspace("collater", order(order(data$.gid)), ens)
 	
 	ens
 }
